@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Noonan Practice Wiki — Network Map</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --clr-matter: #38bdf8;
+    --clr-person: #a78bfa;
+    --clr-court: #2dd4bf;
+    --clr-authority: #fb923c;
+    --clr-issue: #f472b6;
+    --clr-overdue: #ef4444;
+    --clr-today: #f59e0b;
+    --clr-upcoming: #3b82f6;
+    --bg-primary: #0a0e17;
+    --bg-panel: rgba(15, 20, 33, 0.96);
+    --bg-bar: rgba(10, 14, 23, 0.92);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ========== TOP BAR ========== */
+  #top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--bg-bar);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  #top-bar h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+
+  #top-bar .subtitle {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /* View toggle buttons */
+  .view-toggles {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 3px;
+    border: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  .view-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .view-btn:hover { color: #94a3b8; }
+  .view-btn.active { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+
+  /* Filter pills */
+  #filter-bar {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    overflow-x: auto;
+    flex-shrink: 1;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-pill {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: #94a3b8;
+    transition: all 0.2s;
+    white-space: nowrap;
+    user-select: none;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 30px;
+  }
+
+  .filter-pill:hover { background: rgba(255,255,255,0.08); }
+  .filter-pill.active {
+    border-color: var(--pill-color, #6366f1);
+    background: var(--pill-bg, rgba(99,102,241,0.15));
+    color: var(--pill-color, #a5b4fc);
+  }
+
+  .filter-pill .dot {
+    display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; margin-right: 4px; vertical-align: middle;
+  }
+
+  /* Search */
+  #search-container {
+    position: relative;
+    flex: 0 1 240px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  #search-input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    min-height: 36px;
+  }
+
+  #search-input:focus {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+  }
+
+  #search-input::placeholder { color: #475569; }
+
+  .search-icon {
+    position: absolute; left: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: #475569; font-size: 13px; pointer-events: none;
+  }
+
+  /* ========== HOT ITEMS BANNER ========== */
+  #hot-banner {
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    background: linear-gradient(180deg, rgba(15,10,5,0.97) 0%, rgba(10,14,23,0.95) 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(239,68,68,0.15);
+    z-index: 95;
+    max-height: 220px;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+    opacity: 1;
+  }
+
+  #hot-banner.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hot-banner-inner {
+    padding: 12px 16px 14px;
+  }
+
+  .hot-banner-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .hot-banner-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ef4444;
+  }
+
+  .hot-banner-count {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: rgba(239,68,68,0.15);
+    color: #fca5a5;
+    font-weight: 600;
+  }
+
+  .hot-banner-collapse {
+    margin-left: auto;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .hot-banner-collapse:hover { background: rgba(255,255,255,0.1); color: #94a3b8; }
+
+  .hot-items-grid {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hot-items-grid::-webkit-scrollbar { display: none; }
+
+  .hot-card {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    min-width: 200px;
+    max-width: 280px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hot-card:hover { transform: translateY(-1px); }
+
+  .hot-card.overdue {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    box-shadow: 0 0 20px rgba(239,68,68,0.08);
+  }
+
+  .hot-card.today {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.2);
+    box-shadow: 0 0 20px rgba(245,158,11,0.08);
+  }
+
+  .hot-card.upcoming {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    box-shadow: 0 0 16px rgba(59,130,246,0.06);
+  }
+
+  .hot-card-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .hot-card.overdue .hot-card-label { color: #fca5a5; }
+  .hot-card.today .hot-card-label { color: #fcd34d; }
+  .hot-card.upcoming .hot-card-label { color: #93c5fd; }
+
+  .hot-card-text {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+
+  .hot-card-urgency {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+
+  .hot-card.overdue .hot-card-urgency { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .hot-card.today .hot-card-urgency { background: rgba(245,158,11,0.2); color: #fcd34d; }
+  .hot-card.upcoming .hot-card-urgency { background: rgba(59,130,246,0.2); color: #93c5fd; }
+
+  /* ========== GRAPH VIEW ========== */
+  #graph-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  svg { width: 100%; height: 100%; display: block; }
+
+  .link { stroke-linecap: round; }
+
+  .node-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    fill: #94a3b8;
+    pointer-events: none;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .node-glow { opacity: 0.3; }
+
+  /* ========== BOLDER HOT PULSE ========== */
+  @keyframes hotPulseOverdue {
+    0%   { r: 0; opacity: 0.7; }
+    50%  { opacity: 0.2; }
+    100% { r: 40; opacity: 0; }
+  }
+
+  @keyframes hotPulseToday {
+    0%   { r: 0; opacity: 0.6; }
+    50%  { opacity: 0.15; }
+    100% { r: 36; opacity: 0; }
+  }
+
+  @keyframes hotPulseUpcoming {
+    0%   { r: 0; opacity: 0.4; }
+    50%  { opacity: 0.1; }
+    100% { r: 30; opacity: 0; }
+  }
+
+  @keyframes hotRingSpin {
+    0%   { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 50; }
+  }
+
+  .hot-ring {
+    animation: hotRingSpin 4s linear infinite;
+  }
+
+  /* ========== CALENDAR VIEW ========== */
+  #calendar-container {
+    display: none;
+    position: fixed;
+    top: 56px; left: 0; right: 0; bottom: 0;
+    background: var(--bg-primary);
+    z-index: 50;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #calendar-container.active { display: block; }
+
+  .cal-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  .cal-month-header {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+
+  .cal-day-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #475569;
+    padding: 8px 0;
+  }
+
+  .cal-day {
+    min-height: 90px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 6px;
+    position: relative;
+    transition: background 0.15s;
+  }
+
+  .cal-day:hover { background: rgba(255,255,255,0.04); }
+
+  .cal-day.empty { background: transparent; border-color: transparent; }
+
+  .cal-day.today-cell {
+    border-color: rgba(245,158,11,0.3);
+    background: rgba(245,158,11,0.04);
+  }
+
+  .cal-day-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 4px;
+  }
+
+  .cal-day.today-cell .cal-day-num { color: #f59e0b; }
+
+  .cal-event {
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    line-height: 1.3;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 22px;
+    display: flex;
+    align-items: center;
+  }
+
+  .cal-event:hover { filter: brightness(1.2); transform: translateX(2px); }
+
+  .cal-event.overdue { background: rgba(239,68,68,0.15); color: #fca5a5; border-left: 2px solid #ef4444; }
+  .cal-event.today-ev { background: rgba(245,158,11,0.15); color: #fcd34d; border-left: 2px solid #f59e0b; }
+  .cal-event.upcoming-ev { background: rgba(59,130,246,0.12); color: #93c5fd; border-left: 2px solid #3b82f6; }
+  .cal-event.normal { background: rgba(255,255,255,0.05); color: #94a3b8; border-left: 2px solid #475569; }
+
+  /* Timeline section below calendar */
+  .timeline-section {
+    margin-top: 12px;
+  }
+
+  .timeline-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .timeline-item:hover { transform: translateX(4px); }
+
+  .timeline-item.overdue {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.12);
+  }
+
+  .timeline-item.today-tl {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.12);
+  }
+
+  .timeline-item.upcoming-tl {
+    background: rgba(59,130,246,0.05);
+    border: 1px solid rgba(59,130,246,0.1);
+  }
+
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 70px;
+    flex-shrink: 0;
+  }
+
+  .tl-date.overdue { color: #fca5a5; }
+  .tl-date.today-tl { color: #fcd34d; }
+  .tl-date.upcoming-tl { color: #93c5fd; }
+
+  .tl-content { flex: 1; }
+
+  .tl-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+  }
+
+  .tl-desc {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+
+  .tl-badge {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ========== MOBILE / CARD VIEW ========== */
+  #mobile-container {
+    display: none;
+    position: fixed;
+    top: 56px; left: 0; right: 0; bottom: 0;
+    background: var(--bg-primary);
+    z-index: 50;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #mobile-container.active { display: block; }
+
+  .mobile-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+  }
+
+  .mobile-section {
+    margin-bottom: 24px;
+  }
+
+  .mobile-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-section-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .mobile-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 48px;
+  }
+
+  .mobile-card:hover, .mobile-card:active {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-1px);
+  }
+
+  .mobile-card.hot-overdue {
+    border-left: 3px solid var(--clr-overdue);
+    box-shadow: inset 0 0 20px rgba(239,68,68,0.04);
+  }
+
+  .mobile-card.hot-today {
+    border-left: 3px solid var(--clr-today);
+    box-shadow: inset 0 0 20px rgba(245,158,11,0.04);
+  }
+
+  .mobile-card.hot-upcoming {
+    border-left: 3px solid var(--clr-upcoming);
+  }
+
+  .mobile-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-card-type {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .mobile-card-summary {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+
+  .mobile-card-hot {
+    font-size: 11px;
+    margin-top: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .mobile-card-hot.overdue { background: rgba(239,68,68,0.1); color: #fca5a5; }
+  .mobile-card-hot.today { background: rgba(245,158,11,0.1); color: #fcd34d; }
+  .mobile-card-hot.upcoming { background: rgba(59,130,246,0.1); color: #93c5fd; }
+
+  .mobile-card-detail {
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mobile-card.expanded .mobile-card-detail { display: block; }
+
+  /* ========== DETAIL PANEL ========== */
+  #detail-panel {
+    position: fixed;
+    top: 56px;
+    right: -420px;
+    width: 400px;
+    max-width: 90vw;
+    height: calc(100vh - 56px);
+    background: var(--bg-panel);
+    backdrop-filter: blur(24px);
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding: 0;
+    z-index: 90;
+    transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #detail-panel.open { right: 0; }
+
+  #detail-panel::-webkit-scrollbar { width: 6px; }
+  #detail-panel::-webkit-scrollbar-track { background: transparent; }
+  #detail-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  .panel-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky; top: 0;
+    background: rgba(15, 20, 33, 0.98);
+    backdrop-filter: blur(24px);
+    z-index: 2;
+  }
+
+  .panel-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    border: none; color: #94a3b8; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .panel-close:hover { background: rgba(255,255,255,0.12); color: #e2e8f0; }
+
+  .panel-type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .panel-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    padding-right: 44px;
+  }
+
+  .panel-status {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .panel-body { padding: 20px 24px 32px; }
+
+  .panel-section { margin-bottom: 20px; }
+
+  .panel-section-title {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: #64748b; margin-bottom: 10px;
+  }
+
+  .panel-section p {
+    font-size: 13px; line-height: 1.6; color: #cbd5e1;
+  }
+
+  .related-chip {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 3px 4px 3px 0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    -webkit-tap-highlight-color: transparent;
+    min-height: 30px;
+  }
+
+  .related-chip:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .urgency-flag {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .urgency-flag.overdue {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    color: #fca5a5;
+  }
+
+  .urgency-flag.today {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.2);
+    color: #fcd34d;
+  }
+
+  .urgency-flag.upcoming {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.2);
+    color: #93c5fd;
+  }
+
+  .urgency-flag .flag-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ========== LEGEND ========== */
+  #legend {
+    position: fixed;
+    bottom: 16px; left: 16px;
+    background: rgba(15,20,33,0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 12px 16px;
+    z-index: 80;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #94a3b8;
+    white-space: nowrap;
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Stats */
+  #stats {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    background: rgba(15,20,33,0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 12px 16px;
+    z-index: 80;
+    font-size: 11px;
+    color: #64748b;
+    display: flex;
+    gap: 14px;
+  }
+
+  .stat-value { color: #e2e8f0; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Tooltip */
+  .node-tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: rgba(15,20,33,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #e2e8f0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+    z-index: 200;
+    backdrop-filter: blur(8px);
+  }
+
+  .node-tooltip.visible { opacity: 1; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    #top-bar { gap: 8px; padding: 0 10px; flex-wrap: wrap; height: auto; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
+    #top-bar .subtitle { display: none; }
+    #search-container { flex: 1 1 160px; }
+    #legend { bottom: 8px; left: 8px; padding: 8px 12px; gap: 10px; font-size: 10px; }
+    #stats { bottom: 8px; right: 8px; padding: 8px 12px; }
+    #detail-panel { width: 100vw; max-width: 100vw; }
+    .cal-grid { grid-template-columns: repeat(7, 1fr); }
+    .cal-day { min-height: 70px; padding: 4px; }
+    .cal-event { font-size: 9px; padding: 2px 4px; }
+  }
+
+  @media (max-width: 600px) {
+    .filter-pill { padding: 4px 8px; font-size: 10px; }
+    #search-container { flex: 1 1 120px; }
+    #legend { flex-wrap: wrap; max-width: calc(100vw - 120px); }
+    .cal-day { min-height: 56px; }
+    .cal-day-num { font-size: 10px; }
+    .hot-card { min-width: 160px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== TOP BAR ==================== -->
+<div id="top-bar">
+  <h1>Noonan Practice Wiki</h1>
+  <span class="subtitle">April 14, 2026</span>
+
+  <div class="view-toggles">
+    <button class="view-btn active" data-view="graph" onclick="switchView('graph')">Graph</button>
+    <button class="view-btn" data-view="calendar" onclick="switchView('calendar')">Calendar</button>
+    <button class="view-btn" data-view="mobile" onclick="switchView('mobile')">Cards</button>
+  </div>
+
+  <div id="filter-bar">
+    <div class="filter-pill active" data-type="all" style="--pill-color:#a5b4fc;--pill-bg:rgba(99,102,241,0.15)">All</div>
+    <div class="filter-pill" data-type="matter" style="--pill-color:#38bdf8;--pill-bg:rgba(56,189,248,0.12)"><span class="dot" style="background:#38bdf8"></span>Matter</div>
+    <div class="filter-pill" data-type="person" style="--pill-color:#a78bfa;--pill-bg:rgba(167,139,250,0.12)"><span class="dot" style="background:#a78bfa"></span>Person</div>
+    <div class="filter-pill" data-type="court" style="--pill-color:#2dd4bf;--pill-bg:rgba(45,212,191,0.12)"><span class="dot" style="background:#2dd4bf"></span>Court</div>
+    <div class="filter-pill" data-type="authority" style="--pill-color:#fb923c;--pill-bg:rgba(251,146,60,0.12)"><span class="dot" style="background:#fb923c"></span>Authority</div>
+    <div class="filter-pill" data-type="issue" style="--pill-color:#f472b6;--pill-bg:rgba(244,114,182,0.12)"><span class="dot" style="background:#f472b6"></span>Issue</div>
+  </div>
+
+  <div id="search-container">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="search-input" placeholder="Search nodes... ( / )">
+  </div>
+</div>
+
+<!-- ==================== HOT ITEMS BANNER ==================== -->
+<div id="hot-banner">
+  <div class="hot-banner-inner">
+    <div class="hot-banner-header">
+      <span class="hot-banner-title">Action Required</span>
+      <span class="hot-banner-count" id="hot-count"></span>
+      <button class="hot-banner-collapse" onclick="toggleBanner()">Hide</button>
+    </div>
+    <div class="hot-items-grid" id="hot-items-grid"></div>
+  </div>
+</div>
+
+<!-- ==================== GRAPH VIEW ==================== -->
+<div id="graph-container">
+  <svg id="graph-svg"></svg>
+</div>
+
+<!-- ==================== CALENDAR VIEW ==================== -->
+<div id="calendar-container"></div>
+
+<!-- ==================== MOBILE / CARD VIEW ==================== -->
+<div id="mobile-container"></div>
+
+<!-- ==================== DETAIL PANEL ==================== -->
+<div id="detail-panel">
+  <div class="panel-header">
+    <button class="panel-close" onclick="closePanel()">&times;</button>
+    <div id="panel-badge" class="panel-type-badge"></div>
+    <div id="panel-title" class="panel-title"></div>
+    <div id="panel-status" class="panel-status"></div>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
+<!-- ==================== LEGEND ==================== -->
+<div id="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--clr-matter)"></div>Matter</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--clr-person)"></div>Person</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--clr-court)"></div>Court</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--clr-authority)"></div>Authority</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--clr-issue)"></div>Issue</div>
+  <div class="legend-item"><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="2,2"/></svg>Urgent</div>
+</div>
+
+<div id="stats">
+  <span><span class="stat-value" id="stat-nodes">0</span> nodes</span>
+  <span><span class="stat-value" id="stat-edges">0</span> connections</span>
+  <span><span class="stat-value" id="stat-hot">0</span> urgent</span>
+</div>
+
+<div class="node-tooltip" id="tooltip"></div>
+
+<script>
+// ============================================================
+// DATA — extracted from wiki .md files on 2026-04-14
+// ============================================================
+
+const typeColors = {
+  matter: '#38bdf8', person: '#a78bfa', court: '#2dd4bf',
+  authority: '#fb923c', issue: '#f472b6'
+};
+
+const typeColorsDim = {
+  matter: 'rgba(56,189,248,0.15)', person: 'rgba(167,139,250,0.15)',
+  court: 'rgba(45,212,191,0.15)', authority: 'rgba(251,146,60,0.15)',
+  issue: 'rgba(244,114,182,0.15)'
+};
+
+const nodes = [
+  // === Authorities ===
+  { id:'romero-1996', label:'Romero (1996)', type:'authority', status:'current', hasPage:true, hot:false,
+    detail:{ title:'Romero Motion (PC 1385)', aliases:'Romero, motion to strike, strike prior, three strikes',
+      summary:'Trial court has discretion to strike a prior serious/violent felony allegation under PC 1385. Williams three-factor test: (1) present offense, (2) prior offenses, (3) defendant\'s background/character/prospects.',
+      keyHoldings:['Romero (1996) 13 Cal.4th 497 — courts may strike a strike prior','Williams (1998) — three-factor test','Carmony (2004) — abuse of discretion standard','PC 1385(c) post-2022 — great weight to priors over 5 years'],
+      mattersUsed:['Caldwell (CR-23-010065) — hearing 4/14/26','Brown (CR-25-003661) — motion file-ready v4'],
+      pitfalls:['Client declaration critical for Factor 3','Ensure rap sheet/CLETS in record','If DA surprise opposition — request continuance'] }},
+  { id:'pitchess-1974', label:'Pitchess (1974)', type:'authority', status:'current', hasPage:true, hot:false,
+    detail:{ title:'Pitchess Motion (Evid. Code 1043-1047)', aliases:'Pitchess, peace officer personnel records',
+      summary:'Defense access to officer personnel records. "Plausible factual scenario" standard (Warrick). In camera review procedure.',
+      keyHoldings:['Pitchess (1974) 11 Cal.3d 531 — foundational case','Warrick (2005) — plausible factual scenario standard','Johnson (2015) — "relatively relaxed" standard','Mooc (2001) — in camera review procedure'],
+      mattersUsed:['Rodgers (CR-2024-001537) — Officer Solis, in camera 4/14','Ruiz Salas (CR-23-009962) — Officer Gaskin, Johnson admonition'],
+      pitfalls:['Prepare hearing binder','Johnson admonition strengthens motion','Plan dismissal motion as follow-up'] }},
+  { id:'pc-1001-36', label:'PC 1001.36 Diversion', type:'authority', status:'current', hasPage:true, hot:false,
+    detail:{ title:'Mental Health Diversion (PC 1001.36)', aliases:'MH diversion, 1001.36, diversion',
+      summary:'Pre-adjudication diversion for qualifying mental disorders. Post-2022 presumption in defendant\'s favor (Doron). Successful completion = dismissal.',
+      keyHoldings:['Doron (2023) — qualifying diagnosis = presumption','Harlow (2025) — prosecution bears clear/convincing burden','Hall (2024) — carjacking is eligible','Williams (2021) — dangerousness = super-strike standard only'],
+      mattersUsed:['Weaver (25-CR-005354) — PC 215(a) carjacking + firearms, motion finalized 4/9/26'],
+      pitfalls:['Expert report must address all statutory criteria','Regional Center referral may help','Treatment plan before hearing'] }},
+
+  // === Issues ===
+  { id:'recusal-side-switch', label:'Recusal — Side-Switch', type:'issue', status:'current', hasPage:true, hot:true, hotLabel:'Bar complaint due 4/15',
+    detail:{ title:'Recusal — Side-Switch Conflict', aliases:'Side-switch, Billups conflict, PC 1424, recusal',
+      summary:'Defense attorney (Billups) left defense and joined DA\'s office. Affects 4+ matters. Screening gap: no ethical wall for ~3 months. Pattern: file PC 1424, if denied pursue writ.',
+      keyHoldings:['Conner (1983) — foundational DA recusal standard','Eubanks (1996) — two-prong test','Haraguchi (2008) — writ relief granted','Choi (2000) — office-wide disqualification despite wall'],
+      playbook:['1. File motion to recuse (PC 1424)','2. If denied — writ of prohibition to CoA','3. State bar complaint against side-switching attorney','4. Coordinate across all affected matters'],
+      affectedMatters:['MejiaMejia — recusal denied, writ planned','Ruiz Salas — recusal heard 4/10/26, outcome unknown','Rodrigues — intake, Franks motion + dismissal','Bar complaint due 4/15/26'] }},
+
+  // === People ===
+  { id:'billups-darryl', label:'Billups, Darryl', type:'person', status:'current', hasPage:true, hot:true, hotLabel:'Bar complaint due TOMORROW (4/15)',
+    detail:{ title:'Darryl J. Billups', aliases:'Darryl Billups, Billups, DJ Billups',
+      summary:'Former defense counsel who joined Alameda DA\'s office Sept 15, 2025. Central figure in recusal litigation. Screening gap: no ethical wall until Dec 12, 2025.',
+      roleHistory:['Through Aug 2025 — Defense counsel for Noonan clients','Sept 15, 2025 — Joined Alameda DA','Sept–Dec 2025 — No ethical wall (3-month gap)','Dec 12, 2025 — Ethical wall implemented'],
+      affectedMatters:['MejiaMejia — appeared in court through Aug 2025','Ruiz Salas — recusal filed 2/18/26','Rodrigues — "first defendant Billups left"','Bar complaint due 4/15/26'] }},
+
+  // === Courts ===
+  { id:'stan-dept-2', label:'Stanislaus Dept 2', type:'court', status:'current', hasPage:true, hot:true, hotLabel:'Caldwell hearing TODAY 8:30 AM',
+    detail:{ title:'Stanislaus County Superior Court — Dept 2', aliases:'Dept 2, Stanislaus Dept 2, Modesto Dept 2',
+      summary:'Judge Ruben A. Villalobos. Clerk: Ruth Bustamante. Reporter: Laura Fowler.',
+      notes:['PC 977 appearance accepted on 2/9/26','Caldwell Romero motion heard here — 30 min time estimate','Address needs verification (Modesto vs Oakland listing)'],
+      mattersHere:['Caldwell (CR-23-010065) — Romero motion, hearing 4/14 at 8:30 AM'] }},
+
+  // === People (referenced) ===
+  { id:'villalobos', label:'Villalobos, Ruben A.', type:'person', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Hon. Ruben A. Villalobos', summary:'Judge, Stanislaus County Dept 2. Presiding over Caldwell Romero motion.' }},
+  { id:'noonan-john', label:'Noonan, John W.', type:'person', status:'current', hasPage:false, hot:false,
+    detail:{ title:'John W. Noonan', summary:'Attorney of record. Appearing on Caldwell, Rodgers, and other matters. Practice owner.' }},
+  { id:'israels-valli', label:'Israels, Valli', type:'person', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Hon. Valli Israels', summary:'Judge, Stanislaus Dept 5. Presiding over Rodgers Pitchess in camera review.' }},
+  { id:'pojman-andrew', label:'Pojman, Andrew P.', type:'person', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Andrew P. Pojman, Ph.D.', summary:'Evaluating expert for Weaver. FSIQ 72 — Mild Intellectual Disability. PC 1001.36 diversion evaluation.' }},
+
+  // === Matters ===
+  { id:'caldwell', label:'Caldwell', type:'matter', status:'current', hasPage:false, hot:true,
+    hotLabel:'HEARING TODAY 8:30 AM — Romero motion, Stanislaus Dept 2',
+    detail:{ title:'Caldwell — CR-23-010065', summary:'Romero motion (PC 1385). 2007 robbery + 2014 attempted criminal threats priors. Hearing 4/14/26 at 8:30 AM, Stanislaus Dept 2, Judge Villalobos. Binder delivered. No DA opposition.',
+      caseNo:'CR-23-010065', nextHearing:'4/14/26 at 8:30 AM — Romero motion' }},
+  { id:'brown', label:'Brown', type:'matter', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Brown — CR-25-003661', summary:'Romero motion. 2003 PC 245(a)(1) strike, 23 years old. Motion file-ready v4 completed 4/7/26.', caseNo:'CR-25-003661' }},
+  { id:'mejiamejia', label:'MejiaMejia', type:'matter', status:'current', hasPage:false, hot:true,
+    hotLabel:'Jury trial 5/26/26 — recusal denied, writ planned',
+    detail:{ title:'MejiaMejia — 22-CR-003198', summary:'Billups appeared and discussed strategy through Aug 2025. Recusal DENIED 1/16/26. Writ to First DCA planned. Jury trial 5/26/26.',
+      caseNo:'22-CR-003198', nextHearing:'5/26/26 — jury trial' }},
+  { id:'ruiz-salas', label:'Ruiz Salas', type:'matter', status:'needs-review', hasPage:false, hot:true,
+    hotLabel:'Hearing outcome UNKNOWN — was 4/10/26',
+    detail:{ title:'Ruiz Salas — CR-23-009962', summary:'Officer Gaskin — Johnson admonition. Pitchess filed 1/23/26 with Suppression, Recusal, Continuance. Hearing 4/10/26 — outcome unknown.', caseNo:'CR-23-009962' }},
+  { id:'rodgers', label:'Rodgers', type:'matter', status:'current', hasPage:false, hot:true,
+    hotLabel:'In camera TODAY 8:30 AM + dismissal motion 18 days OVERDUE',
+    detail:{ title:'Rodgers — CR-2024-001537', summary:'Pitchess in camera. Officer Solis fired for dishonesty. Two conflicting reports (MPD vs CHP). In camera 4/14/26, defense excused. Ruling 5/26/26. Dismissal motion 18 days overdue.',
+      caseNo:'CR-2024-001537', nextHearing:'4/14/26 — in camera; ruling 5/26/26' }},
+  { id:'rodrigues', label:'Rodrigues, Derek', type:'matter', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Rodrigues — Derek', summary:'"The very first defendant Darryl Billups left." Intake stage. Franks motion + dismissal requested.' }},
+  { id:'weaver', label:'Weaver', type:'matter', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Weaver — 25-CR-005354', summary:'PC 215(a) carjacking + firearms. Dr. Pojman eval: FSIQ 72, Mild Intellectual Disability. PC 1001.36 motion FINALIZED 4/9/26. Needs filing + service.', caseNo:'25-CR-005354' }},
+  { id:'mitchell', label:'Mitchell', type:'matter', status:'current', hasPage:false, hot:true,
+    hotLabel:'Bar complaint due TOMORROW (4/15) + sentence hearing 4/27 + 17 days OVERDUE',
+    detail:{ title:'Mitchell', summary:'Billups bar complaint due 4/15 (TOMORROW). Indicated sentence hearing 4/27. Separate hearing date 17 days overdue.', nextHearing:'4/27 — indicated sentence hearing' }},
+  { id:'adamski', label:'Adamski', type:'matter', status:'current', hasPage:false, hot:true, hotLabel:'Jurisdictional deadline April 25-30',
+    detail:{ title:'Adamski — Appeal', summary:'Jurisdictional deadline April 25-30. Time-sensitive.' }},
+  { id:'culver', label:'Culver v. Noonan', type:'matter', status:'current', hasPage:false, hot:true, hotLabel:'Hearing 4/21',
+    detail:{ title:'Culver v. Noonan', summary:'Hearing set for 4/21/26.', nextHearing:'4/21/26' }},
+  { id:'hunter', label:'Hunter', type:'matter', status:'current', hasPage:false, hot:true, hotLabel:'Legal memo 10 DAYS OVERDUE',
+    detail:{ title:'Hunter', summary:'Case analysis / legal memo was due 4/4 — now 10 days overdue.' }},
+  { id:'hobbs-blackwell', label:'Hobbs/Blackwell', type:'matter', status:'current', hasPage:false, hot:true,
+    hotLabel:'Motion filing 16 DAYS OVERDUE',
+    detail:{ title:'Hobbs/Blackwell', summary:'Motion filing 16 days overdue. Waiting on warrant search video from DA (no response).' }},
+  { id:'rafanello', label:'Rafanello', type:'matter', status:'current', hasPage:false, hot:false,
+    detail:{ title:'Rafanello v. Converge', summary:'Commission dispute, ~$50K. Intake processed. Waiting on signed comp plan. Case folder created.' }}
+];
+
+const links = [
+  { source:'romero-1996', target:'caldwell', label:'authority used' },
+  { source:'romero-1996', target:'brown', label:'authority used' },
+  { source:'romero-1996', target:'recusal-side-switch', label:'related issue' },
+  { source:'romero-1996', target:'villalobos', label:'related person' },
+  { source:'pitchess-1974', target:'rodgers', label:'authority used' },
+  { source:'pitchess-1974', target:'ruiz-salas', label:'authority used' },
+  { source:'pitchess-1974', target:'recusal-side-switch', label:'related issue' },
+  { source:'pitchess-1974', target:'israels-valli', label:'related person' },
+  { source:'pc-1001-36', target:'weaver', label:'authority used' },
+  { source:'pc-1001-36', target:'pojman-andrew', label:'evaluating expert' },
+  { source:'recusal-side-switch', target:'mejiamejia', label:'pattern applies' },
+  { source:'recusal-side-switch', target:'ruiz-salas', label:'pattern applies' },
+  { source:'recusal-side-switch', target:'rodgers', label:'pattern applies' },
+  { source:'recusal-side-switch', target:'rodrigues', label:'pattern applies' },
+  { source:'recusal-side-switch', target:'billups-darryl', label:'central figure' },
+  { source:'recusal-side-switch', target:'noonan-john', label:'AOR' },
+  { source:'billups-darryl', target:'mejiamejia', label:'former counsel' },
+  { source:'billups-darryl', target:'ruiz-salas', label:'former counsel' },
+  { source:'billups-darryl', target:'rodgers', label:'conflict' },
+  { source:'billups-darryl', target:'rodrigues', label:'former counsel' },
+  { source:'billups-darryl', target:'mitchell', label:'bar complaint' },
+  { source:'stan-dept-2', target:'caldwell', label:'venue' },
+  { source:'stan-dept-2', target:'villalobos', label:'presiding judge' },
+  { source:'noonan-john', target:'caldwell', label:'AOR' },
+  { source:'noonan-john', target:'rodgers', label:'AOR' },
+  { source:'noonan-john', target:'mejiamejia', label:'AOR' },
+  { source:'noonan-john', target:'weaver', label:'AOR' },
+  { source:'villalobos', target:'caldwell', label:'presiding judge' },
+  { source:'israels-valli', target:'rodgers', label:'presiding judge' },
+  { source:'pojman-andrew', target:'weaver', label:'evaluating expert' },
+  { source:'caldwell', target:'brown', label:'same authority (Romero)' },
+  { source:'rodgers', target:'ruiz-salas', label:'same authority (Pitchess)' },
+  { source:'mejiamejia', target:'rodrigues', label:'same issue (Billups recusal)' },
+  { source:'mitchell', target:'billups-darryl', label:'bar complaint subject' },
+  { source:'rodgers', target:'billups-darryl', label:'Billups overlap' },
+];
+
+// Deduplicate links
+const linkSet = new Set();
+const dedupedLinks = [];
+links.forEach(l => {
+  const k1 = `${l.source}--${l.target}`, k2 = `${l.target}--${l.source}`;
+  if (!linkSet.has(k1) && !linkSet.has(k2)) { linkSet.add(k1); dedupedLinks.push(l); }
+});
+
+// ============================================================
+// HOT ITEMS (from hot.md)
+// ============================================================
+const hotItems = {
+  'caldwell':          { urgency:'today',    text:'Hearing TODAY 8:30 AM — Romero motion', date:'2026-04-14' },
+  'rodgers':           { urgency:'today',    text:'In camera TODAY 8:30 AM (defense excused)', date:'2026-04-14' },
+  'mitchell':          { urgency:'overdue',  text:'Bar complaint due TOMORROW (4/15)', date:'2026-04-15' },
+  'adamski':           { urgency:'upcoming', text:'Jurisdictional deadline April 25-30', date:'2026-04-25' },
+  'culver':            { urgency:'upcoming', text:'Hearing 4/21', date:'2026-04-21' },
+  'mejiamejia':        { urgency:'upcoming', text:'Jury trial 5/26', date:'2026-05-26' },
+  'hunter':            { urgency:'overdue',  text:'Legal memo 10 DAYS OVERDUE (was due 4/4)', date:'2026-04-04' },
+  'hobbs-blackwell':   { urgency:'overdue',  text:'Motion filing 16 DAYS OVERDUE', date:'2026-03-29' },
+  'ruiz-salas':        { urgency:'overdue',  text:'Hearing outcome UNKNOWN (4/10)', date:'2026-04-10' },
+  'recusal-side-switch':{ urgency:'overdue', text:'Bar complaint due TOMORROW (4/15)', date:'2026-04-15' },
+  'billups-darryl':    { urgency:'overdue',  text:'Bar complaint due TOMORROW (4/15)', date:'2026-04-15' },
+  'stan-dept-2':       { urgency:'today',    text:'Caldwell hearing TODAY 8:30 AM', date:'2026-04-14' },
+};
+
+// Calendar events with dates for timeline
+const calendarEvents = [
+  { date:'2026-03-29', label:'Hobbs/Blackwell', text:'Motion filing was due', nodeId:'hobbs-blackwell', urgency:'overdue' },
+  { date:'2026-04-04', label:'Hunter', text:'Legal memo was due', nodeId:'hunter', urgency:'overdue' },
+  { date:'2026-04-10', label:'Ruiz Salas', text:'Hearing (outcome unknown)', nodeId:'ruiz-salas', urgency:'overdue' },
+  { date:'2026-04-14', label:'Caldwell', text:'Romero motion hearing 8:30 AM, Dept 2', nodeId:'caldwell', urgency:'today' },
+  { date:'2026-04-14', label:'Rodgers', text:'In camera Pitchess 8:30 AM, Dept 5', nodeId:'rodgers', urgency:'today' },
+  { date:'2026-04-15', label:'Mitchell / Billups', text:'State bar complaint due', nodeId:'mitchell', urgency:'overdue' },
+  { date:'2026-04-21', label:'Culver v. Noonan', text:'Hearing', nodeId:'culver', urgency:'upcoming' },
+  { date:'2026-04-25', label:'Adamski', text:'Appeal jurisdictional deadline begins', nodeId:'adamski', urgency:'upcoming' },
+  { date:'2026-04-27', label:'Mitchell', text:'Indicated sentence hearing', nodeId:'mitchell', urgency:'upcoming' },
+  { date:'2026-04-30', label:'Adamski', text:'Appeal jurisdictional deadline ends', nodeId:'adamski', urgency:'upcoming' },
+  { date:'2026-05-26', label:'MejiaMejia', text:'Jury trial', nodeId:'mejiamejia', urgency:'upcoming' },
+  { date:'2026-05-26', label:'Rodgers', text:'Pitchess ruling', nodeId:'rodgers', urgency:'upcoming' },
+];
+
+// ============================================================
+// VIEW MANAGEMENT
+// ============================================================
+let currentView = 'graph';
+let bannerCollapsed = false;
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  document.getElementById('graph-container').style.display = view === 'graph' ? 'block' : 'none';
+  document.getElementById('calendar-container').className = view === 'calendar' ? 'active' : '';
+  document.getElementById('mobile-container').className = view === 'mobile' ? 'active' : '';
+  document.getElementById('legend').style.display = view === 'graph' ? 'flex' : 'none';
+  document.getElementById('stats').style.display = view === 'graph' ? 'flex' : 'none';
+  document.getElementById('filter-bar').style.display = view === 'graph' ? 'flex' : 'none';
+
+  if (view === 'graph') {
+    document.body.style.overflow = 'hidden';
+    simulation.alpha(0.1).restart();
+  } else {
+    document.body.style.overflow = 'hidden'; // scroll handled by inner containers
+  }
+
+  if (view === 'calendar') buildCalendar();
+  if (view === 'mobile') buildMobileView();
+}
+
+function toggleBanner() {
+  bannerCollapsed = !bannerCollapsed;
+  document.getElementById('hot-banner').classList.toggle('collapsed', bannerCollapsed);
+}
+
+// ============================================================
+// HOT BANNER BUILD
+// ============================================================
+function buildHotBanner() {
+  const grid = document.getElementById('hot-items-grid');
+  const sortOrder = { overdue: 0, today: 1, upcoming: 2 };
+
+  const sorted = Object.entries(hotItems)
+    .map(([id, h]) => ({ id, ...h, node: nodes.find(n => n.id === id) }))
+    .filter(h => h.node)
+    .sort((a, b) => sortOrder[a.urgency] - sortOrder[b.urgency]);
+
+  // Deduplicate by text to avoid repeating "Bar complaint due TOMORROW"
+  const seen = new Set();
+  const unique = sorted.filter(h => {
+    const k = h.text;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+
+  document.getElementById('hot-count').textContent = unique.length + ' items';
+
+  grid.innerHTML = unique.map(h => `
+    <div class="hot-card ${h.urgency}" onclick="showDetail(nodes.find(n=>n.id==='${h.id}'))">
+      <div class="hot-card-urgency">${h.urgency === 'overdue' ? 'OVERDUE' : h.urgency === 'today' ? 'TODAY' : 'UPCOMING'}</div>
+      <div class="hot-card-label">${h.node.label}</div>
+      <div class="hot-card-text">${h.text}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// CALENDAR VIEW BUILD
+// ============================================================
+function buildCalendar() {
+  const container = document.getElementById('calendar-container');
+  let html = '<div class="cal-inner">';
+
+  // April 2026
+  html += buildMonthGrid(2026, 3, 'April 2026'); // month is 0-indexed
+  // May 2026
+  html += buildMonthGrid(2026, 4, 'May 2026');
+
+  // Timeline list below
+  html += '<div class="timeline-section">';
+  html += '<div class="timeline-section-title" style="color:#ef4444">Overdue & Urgent Timeline</div>';
+
+  const sortedEvents = [...calendarEvents].sort((a, b) => a.date.localeCompare(b.date));
+  const today = '2026-04-14';
+
+  sortedEvents.forEach(ev => {
+    const cls = ev.urgency === 'overdue' ? 'overdue' : ev.date === today ? 'today-tl' : 'upcoming-tl';
+    const dateObj = new Date(ev.date + 'T12:00:00');
+    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    html += `
+      <div class="timeline-item ${cls}" onclick="showDetail(nodes.find(n=>n.id==='${ev.nodeId}'))">
+        <div class="tl-date ${cls}">${dateStr}</div>
+        <div class="tl-content">
+          <div class="tl-label">${ev.label}</div>
+          <div class="tl-desc">${ev.text}</div>
+        </div>
+        <div class="tl-badge" style="background:${ev.urgency==='overdue'?'rgba(239,68,68,0.15);color:#fca5a5':ev.urgency==='today'?'rgba(245,158,11,0.15);color:#fcd34d':'rgba(59,130,246,0.15);color:#93c5fd'}">${ev.urgency==='overdue'?'OVERDUE':ev.date===today?'TODAY':'UPCOMING'}</div>
+      </div>`;
+  });
+
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+function buildMonthGrid(year, month, title) {
+  const today = '2026-04-14';
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  let html = `<div class="cal-month-header">${title}</div><div class="cal-grid">`;
+  dayNames.forEach(d => { html += `<div class="cal-day-header">${d}</div>`; });
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateStr === today;
+    const dayEvents = calendarEvents.filter(e => e.date === dateStr);
+
+    html += `<div class="cal-day${isToday ? ' today-cell' : ''}">`;
+    html += `<div class="cal-day-num">${d}</div>`;
+    dayEvents.forEach(ev => {
+      const cls = ev.urgency === 'overdue' ? 'overdue' : (isToday ? 'today-ev' : 'upcoming-ev');
+      html += `<div class="cal-event ${cls}" onclick="showDetail(nodes.find(n=>n.id==='${ev.nodeId}'))">${ev.label}</div>`;
+    });
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// MOBILE / CARD VIEW BUILD
+// ============================================================
+function buildMobileView() {
+  const container = document.getElementById('mobile-container');
+  let html = '<div class="mobile-inner">';
+
+  // Urgent section first
+  const hotNodes = nodes.filter(n => n.hot).sort((a, b) => {
+    const order = { overdue: 0, today: 1, upcoming: 2 };
+    return (order[hotItems[a.id]?.urgency] ?? 3) - (order[hotItems[b.id]?.urgency] ?? 3);
+  });
+
+  if (hotNodes.length) {
+    html += '<div class="mobile-section">';
+    html += '<div class="mobile-section-title" style="color:#ef4444"><div class="mobile-section-dot" style="background:#ef4444"></div>Action Required</div>';
+    hotNodes.forEach(n => { html += buildMobileCard(n); });
+    html += '</div>';
+  }
+
+  // By type
+  const types = ['matter','person','court','authority','issue'];
+  types.forEach(type => {
+    const typeNodes = nodes.filter(n => n.type === type && !n.hot);
+    if (!typeNodes.length) return;
+    html += '<div class="mobile-section">';
+    html += `<div class="mobile-section-title" style="color:${typeColors[type]}"><div class="mobile-section-dot" style="background:${typeColors[type]}"></div>${type.charAt(0).toUpperCase() + type.slice(1)}s</div>`;
+    typeNodes.forEach(n => { html += buildMobileCard(n); });
+    html += '</div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function buildMobileCard(n) {
+  const hi = hotItems[n.id];
+  const hotClass = hi ? (hi.urgency === 'overdue' ? 'hot-overdue' : hi.urgency === 'today' ? 'hot-today' : 'hot-upcoming') : '';
+
+  let html = `<div class="mobile-card ${hotClass}" onclick="this.classList.toggle('expanded')">`;
+  html += `<div class="mobile-card-title">
+    <span>${n.detail?.title || n.label}</span>
+    <span class="mobile-card-type" style="background:${typeColorsDim[n.type]};color:${typeColors[n.type]}">${n.type}</span>
+  </div>`;
+
+  if (hi) {
+    html += `<div class="mobile-card-hot ${hi.urgency}">${hi.urgency === 'overdue' ? '&#9888; ' : hi.urgency === 'today' ? '&#9200; ' : '&#128197; '}${hi.text}</div>`;
+  }
+
+  if (n.detail?.summary) {
+    html += `<div class="mobile-card-summary">${n.detail.summary}</div>`;
+  }
+
+  // Expandable detail
+  html += '<div class="mobile-card-detail">';
+  if (n.detail?.nextHearing) html += `<p style="font-size:12px;color:#fcd34d;margin-bottom:6px"><strong>Next:</strong> ${n.detail.nextHearing}</p>`;
+  if (n.detail?.caseNo) html += `<p style="font-size:12px;color:#94a3b8;margin-bottom:6px;font-family:JetBrains Mono,monospace">${n.detail.caseNo}</p>`;
+
+  const connected = [];
+  dedupedLinks.forEach(l => {
+    const sid = typeof l.source === 'object' ? l.source.id : l.source;
+    const tid = typeof l.target === 'object' ? l.target.id : l.target;
+    if (sid === n.id) { const t = nodes.find(nd => nd.id === tid); if (t) connected.push(t); }
+    if (tid === n.id) { const s = nodes.find(nd => nd.id === sid); if (s) connected.push(s); }
+  });
+
+  if (connected.length) {
+    html += `<p style="font-size:11px;color:#64748b;margin-top:8px;margin-bottom:4px">Connections:</p>`;
+    html += connected.map(c => `<span class="related-chip" style="color:${typeColors[c.type]};border-color:${typeColors[c.type]}33" onclick="event.stopPropagation();showDetail(nodes.find(n=>n.id==='${c.id}'))">${c.label}</span>`).join('');
+  }
+
+  html += `<p style="margin-top:10px"><span class="related-chip" style="color:#a5b4fc;border-color:rgba(99,102,241,0.3)" onclick="event.stopPropagation();showDetail(nodes.find(nd=>nd.id==='${n.id}'))">Open full detail &rarr;</span></p>`;
+  html += '</div></div>';
+  return html;
+}
+
+// ============================================================
+// D3 GRAPH
+// ============================================================
+
+const svg = d3.select('#graph-svg');
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+const zoom = d3.zoom()
+  .scaleExtent([0.2, 4])
+  .on('zoom', (event) => container.attr('transform', event.transform));
+
+svg.call(zoom);
+const container = svg.append('g');
+const defs = svg.append('defs');
+
+// Glow filter
+const glowFilter = defs.append('filter').attr('id','glow').attr('x','-50%').attr('y','-50%').attr('width','200%').attr('height','200%');
+glowFilter.append('feGaussianBlur').attr('stdDeviation','4').attr('result','coloredBlur');
+const gm = glowFilter.append('feMerge'); gm.append('feMergeNode').attr('in','coloredBlur'); gm.append('feMergeNode').attr('in','SourceGraphic');
+
+// Urgency glow filters
+['overdue','today-glow','upcoming-glow'].forEach((name, i) => {
+  const colors = ['#ef4444','#f59e0b','#3b82f6'];
+  const stds = [10, 8, 6];
+  const f = defs.append('filter').attr('id',name).attr('x','-200%').attr('y','-200%').attr('width','500%').attr('height','500%');
+  f.append('feFlood').attr('flood-color', colors[i]).attr('flood-opacity', 0.4).attr('result','flood');
+  f.append('feComposite').attr('in','flood').attr('in2','SourceGraphic').attr('operator','in').attr('result','mask');
+  f.append('feGaussianBlur').attr('in','mask').attr('stdDeviation', stds[i]).attr('result','blur');
+  const m = f.append('feMerge'); m.append('feMergeNode').attr('in','blur'); m.append('feMergeNode').attr('in','SourceGraphic');
+});
+
+// Connection counts for sizing
+const connectionCount = {};
+dedupedLinks.forEach(l => {
+  connectionCount[l.source] = (connectionCount[l.source] || 0) + 1;
+  connectionCount[l.target] = (connectionCount[l.target] || 0) + 1;
+});
+
+function nodeRadius(d) {
+  const conns = connectionCount[d.id] || 1;
+  const base = d.hasPage ? 14 : 10;
+  return base + Math.min(conns * 1.5, 10);
+}
+
+// Force simulation
+const simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(dedupedLinks).id(d => d.id).distance(d => {
+    const s = nodes.find(n => n.id === (d.source.id || d.source));
+    const t = nodes.find(n => n.id === (d.target.id || d.target));
+    return (s && t && s.type === t.type) ? 80 : 140;
+  }).strength(0.4))
+  .force('charge', d3.forceManyBody().strength(-350).distanceMax(500))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collision', d3.forceCollide().radius(d => nodeRadius(d) + 15))
+  .force('x', d3.forceX(width / 2).strength(0.04))
+  .force('y', d3.forceY(height / 2).strength(0.04));
+
+// Links
+const linkGroup = container.append('g').attr('class','links');
+const link = linkGroup.selectAll('line').data(dedupedLinks).join('line')
+  .attr('class','link')
+  .attr('stroke', d => {
+    const s = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source);
+    return s ? typeColors[s.type] : '#334155';
+  })
+  .attr('stroke-opacity', 0.15)
+  .attr('stroke-width', 1.5);
+
+// Nodes
+const nodeGroup = container.append('g').attr('class','nodes');
+const node = nodeGroup.selectAll('g').data(nodes).join('g')
+  .attr('class', d => `node-group ${d.hot ? 'hot' : ''}`)
+  .style('cursor','pointer')
+  .call(d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded));
+
+// === BOLDER URGENCY: expanding pulse rings ===
+node.filter(d => d.hot).each(function(d) {
+  const g = d3.select(this);
+  const hi = hotItems[d.id];
+  const color = hi?.urgency === 'overdue' ? '#ef4444' : hi?.urgency === 'today' ? '#f59e0b' : '#3b82f6';
+  const r = nodeRadius(d);
+  const animName = hi?.urgency === 'overdue' ? 'hotPulseOverdue' : hi?.urgency === 'today' ? 'hotPulseToday' : 'hotPulseUpcoming';
+
+  // Two staggered expanding rings
+  for (let i = 0; i < 2; i++) {
+    g.append('circle')
+      .attr('r', r)
+      .attr('fill', color)
+      .attr('stroke', 'none')
+      .attr('opacity', 0)
+      .style('animation', `${animName} 3s ease-out ${i * 1.5}s infinite`)
+      .style('transform-origin', 'center');
+  }
+});
+
+// Spinning dashed hot ring
+node.filter(d => d.hot).append('circle')
+  .attr('class','hot-ring')
+  .attr('r', d => nodeRadius(d) + 5)
+  .attr('fill','none')
+  .attr('stroke', d => {
+    const hi = hotItems[d.id];
+    return hi?.urgency === 'overdue' ? '#ef4444' : hi?.urgency === 'today' ? '#f59e0b' : '#3b82f6';
+  })
+  .attr('stroke-width', 2.5)
+  .attr('stroke-dasharray','6,4')
+  .attr('opacity', 0.9);
+
+// Background glow — MUCH stronger for hot items
+node.append('circle')
+  .attr('class','node-glow')
+  .attr('r', d => nodeRadius(d) + (d.hot ? 16 : 8))
+  .attr('fill', d => {
+    if (d.hot) {
+      const hi = hotItems[d.id];
+      return hi?.urgency === 'overdue' ? '#ef4444' : hi?.urgency === 'today' ? '#f59e0b' : typeColors[d.type];
+    }
+    return typeColors[d.type];
+  })
+  .attr('opacity', d => d.hot ? 0.2 : 0.08)
+  .attr('filter', d => {
+    if (!d.hot) return 'url(#glow)';
+    const hi = hotItems[d.id];
+    return hi?.urgency === 'overdue' ? 'url(#overdue)' : hi?.urgency === 'today' ? 'url(#today-glow)' : 'url(#upcoming-glow)';
+  });
+
+// Main circle
+node.append('circle')
+  .attr('class','node-circle')
+  .attr('r', d => nodeRadius(d))
+  .attr('fill', d => {
+    const c = d3.color(typeColors[d.type]);
+    return d.hasPage ? c.toString() : c.darker(0.8).toString();
+  })
+  .attr('fill-opacity', d => d.hasPage ? 0.85 : 0.45)
+  .attr('stroke', d => typeColors[d.type])
+  .attr('stroke-width', d => d.hasPage ? 2.5 : 1.5)
+  .attr('stroke-opacity', d => d.hasPage ? 0.9 : 0.4);
+
+// Type letter
+node.append('text')
+  .attr('text-anchor','middle').attr('dominant-baseline','central')
+  .attr('fill','#fff')
+  .attr('font-size', d => nodeRadius(d) * 0.7 + 'px')
+  .attr('font-weight','700')
+  .attr('font-family',"'JetBrains Mono', monospace")
+  .attr('opacity', 0.9).attr('pointer-events','none')
+  .text(d => ({ matter:'M', person:'P', court:'C', authority:'A', issue:'I' }[d.type]));
+
+// Labels
+const labels = nodeGroup.selectAll('text.node-label').data(nodes).join('text')
+  .attr('class','node-label')
+  .attr('dy', d => nodeRadius(d) + 14)
+  .attr('fill','#94a3b8').attr('font-size','10px')
+  .text(d => d.label);
+
+// Tooltip
+const tooltip = document.getElementById('tooltip');
+
+node.on('mouseover', function(event, d) {
+  tooltip.innerHTML = `<strong>${d.label}</strong><br><span style="color:${typeColors[d.type]};font-size:11px">${d.type}</span>${d.hot ? `<br><span style="color:#fca5a5;font-size:11px">${hotItems[d.id]?.text || ''}</span>` : ''}`;
+  tooltip.classList.add('visible');
+  const connected = new Set([d.id]);
+  dedupedLinks.forEach(l => {
+    const sid = typeof l.source==='object'?l.source.id:l.source;
+    const tid = typeof l.target==='object'?l.target.id:l.target;
+    if (sid===d.id) connected.add(tid);
+    if (tid===d.id) connected.add(sid);
+  });
+  node.selectAll('.node-circle').attr('opacity', n => connected.has(n.id)?1:0.15);
+  node.selectAll('.node-glow').attr('opacity', n => connected.has(n.id)?0.15:0.02);
+  labels.attr('opacity', n => connected.has(n.id)?1:0.1);
+  link.attr('stroke-opacity', l => {
+    const sid = typeof l.source==='object'?l.source.id:l.source;
+    const tid = typeof l.target==='object'?l.target.id:l.target;
+    return (sid===d.id||tid===d.id)?0.5:0.03;
+  }).attr('stroke-width', l => {
+    const sid = typeof l.source==='object'?l.source.id:l.source;
+    const tid = typeof l.target==='object'?l.target.id:l.target;
+    return (sid===d.id||tid===d.id)?2.5:1;
+  });
+});
+
+node.on('mousemove', function(event) {
+  tooltip.style.left = (event.pageX+14)+'px';
+  tooltip.style.top = (event.pageY-14)+'px';
+});
+
+node.on('mouseout', function() {
+  tooltip.classList.remove('visible');
+  node.selectAll('.node-circle').attr('opacity',1);
+  node.selectAll('.node-glow').attr('opacity', d => d.hot ? 0.2 : 0.08);
+  labels.attr('opacity',1);
+  link.attr('stroke-opacity',0.15).attr('stroke-width',1.5);
+});
+
+node.on('click', function(event, d) { event.stopPropagation(); showDetail(d); });
+svg.on('click', () => closePanel());
+
+// Stats
+document.getElementById('stat-nodes').textContent = nodes.length;
+document.getElementById('stat-edges').textContent = dedupedLinks.length;
+document.getElementById('stat-hot').textContent = Object.keys(hotItems).length;
+
+// Tick
+simulation.on('tick', () => {
+  link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+  node.attr('transform', d => `translate(${d.x},${d.y})`);
+  labels.attr('x', d => d.x).attr('y', d => d.y);
+});
+
+function dragStarted(event, d) { if(!event.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; }
+function dragged(event, d) { d.fx=event.x; d.fy=event.y; }
+function dragEnded(event, d) { if(!event.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; }
+
+// ============================================================
+// DETAIL PANEL (shared across all views)
+// ============================================================
+
+function showDetail(d) {
+  const panel = document.getElementById('detail-panel');
+  const badge = document.getElementById('panel-badge');
+  const title = document.getElementById('panel-title');
+  const status = document.getElementById('panel-status');
+  const body = document.getElementById('panel-body');
+
+  badge.textContent = d.type;
+  badge.style.background = typeColorsDim[d.type];
+  badge.style.color = typeColors[d.type];
+  title.textContent = d.detail?.title || d.label;
+
+  const statusColor = d.status==='current'?'#22c55e':d.status==='needs-review'?'#f59e0b':'#64748b';
+  status.innerHTML = `<span class="status-dot" style="background:${statusColor}"></span>${d.status}${d.hasPage?'':' &middot; <span style="color:#64748b">no wiki page yet</span>'}`;
+
+  let html = '';
+  const hi = hotItems[d.id];
+  if (hi) {
+    const icons = { overdue:'&#128308;', today:'&#128993;', upcoming:'&#128309;' };
+    html += `<div class="urgency-flag ${hi.urgency}"><span class="flag-icon">${icons[hi.urgency]}</span><span>${hi.text}</span></div>`;
+  }
+
+  if (d.detail?.summary) html += `<div class="panel-section"><div class="panel-section-title">Summary</div><p>${d.detail.summary}</p></div>`;
+  if (d.detail?.aliases) html += `<div class="panel-section"><div class="panel-section-title">Aliases</div><p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#94a3b8">${d.detail.aliases}</p></div>`;
+  if (d.detail?.caseNo) html += `<div class="panel-section"><div class="panel-section-title">Case Number</div><p style="font-family:'JetBrains Mono',monospace;font-size:13px">${d.detail.caseNo}</p></div>`;
+  if (d.detail?.nextHearing) html += `<div class="panel-section"><div class="panel-section-title">Next Hearing</div><p>${d.detail.nextHearing}</p></div>`;
+  if (d.detail?.keyHoldings) html += `<div class="panel-section"><div class="panel-section-title">Key Holdings</div>${d.detail.keyHoldings.map(h=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5">&#x2022; ${h}</p>`).join('')}</div>`;
+  if (d.detail?.roleHistory) html += `<div class="panel-section"><div class="panel-section-title">Role History</div>${d.detail.roleHistory.map(r=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5">&#x2022; ${r}</p>`).join('')}</div>`;
+  if (d.detail?.playbook) html += `<div class="panel-section"><div class="panel-section-title">Playbook</div>${d.detail.playbook.map(p=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5">${p}</p>`).join('')}</div>`;
+
+  const matters = d.detail?.mattersUsed || d.detail?.affectedMatters || d.detail?.mattersHere;
+  if (matters) html += `<div class="panel-section"><div class="panel-section-title">Related Matters</div>${matters.map(m=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5">&#x2022; ${m}</p>`).join('')}</div>`;
+  if (d.detail?.notes) html += `<div class="panel-section"><div class="panel-section-title">Practice Notes</div>${d.detail.notes.map(n=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5">&#x2022; ${n}</p>`).join('')}</div>`;
+  if (d.detail?.pitfalls) html += `<div class="panel-section"><div class="panel-section-title">Pitfalls</div>${d.detail.pitfalls.map(p=>`<p style="margin-bottom:6px;font-size:12px;line-height:1.5;color:#fca5a5">&#x26A0; ${p}</p>`).join('')}</div>`;
+
+  const connected = [];
+  dedupedLinks.forEach(l => {
+    const sid = typeof l.source==='object'?l.source.id:l.source;
+    const tid = typeof l.target==='object'?l.target.id:l.target;
+    if (sid===d.id) { const tn=nodes.find(n=>n.id===tid); if(tn) connected.push({node:tn,label:l.label}); }
+    if (tid===d.id) { const sn=nodes.find(n=>n.id===sid); if(sn) connected.push({node:sn,label:l.label}); }
+  });
+
+  if (connected.length) {
+    html += `<div class="panel-section"><div class="panel-section-title">Connections (${connected.length})</div>${connected.map(c=>`<span class="related-chip" style="color:${typeColors[c.node.type]};border-color:${typeColors[c.node.type]}33" onclick="navigateToNode('${c.node.id}')">${c.node.label} <span style="color:#64748b;font-size:10px">${c.label}</span></span>`).join('')}</div>`;
+  }
+
+  body.innerHTML = html;
+  panel.classList.add('open');
+}
+
+function closePanel() { document.getElementById('detail-panel').classList.remove('open'); }
+
+function navigateToNode(id) {
+  const d = nodes.find(n => n.id === id);
+  if (d) {
+    showDetail(d);
+    if (currentView === 'graph') {
+      const transform = d3.zoomTransform(svg.node());
+      const x = width/2 - d.x*transform.k;
+      const y = height/2 - d.y*transform.k;
+      svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity.translate(x,y).scale(transform.k));
+    }
+  }
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) {
+    node.selectAll('.node-circle').attr('opacity',1);
+    node.selectAll('.node-glow').attr('opacity', d => d.hot ? 0.2 : 0.08);
+    labels.attr('opacity',1);
+    link.attr('stroke-opacity',0.15);
+    return;
+  }
+  const matches = new Set();
+  nodes.forEach(n => {
+    const t = [n.label,n.type,n.detail?.title,n.detail?.aliases,n.detail?.summary,n.detail?.caseNo].filter(Boolean).join(' ').toLowerCase();
+    if (t.includes(q)) matches.add(n.id);
+  });
+  node.selectAll('.node-circle').attr('opacity', n => matches.has(n.id)?1:0.1);
+  node.selectAll('.node-glow').attr('opacity', n => matches.has(n.id)?0.15:0.01);
+  labels.attr('opacity', n => matches.has(n.id)?1:0.08);
+  link.attr('stroke-opacity',0.03);
+  if (matches.size===1) {
+    const id=[...matches][0]; const d=nodes.find(n=>n.id===id);
+    if(d){const tr=d3.zoomTransform(svg.node());svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(width/2-d.x*tr.k,height/2-d.y*tr.k).scale(tr.k));}
+  }
+});
+
+// ============================================================
+// FILTER
+// ============================================================
+let activeFilter = 'all';
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    activeFilter = this.dataset.type;
+    if (activeFilter==='all') {
+      node.style('display','block'); labels.style('display','block'); link.style('display','block');
+      node.selectAll('.node-circle').attr('opacity',1);
+      node.selectAll('.node-glow').attr('opacity', d => d.hot ? 0.2 : 0.08);
+      labels.attr('opacity',1); link.attr('stroke-opacity',0.15);
+    } else {
+      const matchIds = new Set(nodes.filter(n=>n.type===activeFilter).map(n=>n.id));
+      const extended = new Set(matchIds);
+      dedupedLinks.forEach(l=>{
+        const sid=typeof l.source==='object'?l.source.id:l.source;
+        const tid=typeof l.target==='object'?l.target.id:l.target;
+        if(matchIds.has(sid)) extended.add(tid);
+        if(matchIds.has(tid)) extended.add(sid);
+      });
+      node.style('display',d=>extended.has(d.id)?'block':'none');
+      labels.style('display',d=>extended.has(d.id)?'block':'none');
+      node.selectAll('.node-circle').attr('opacity',d=>matchIds.has(d.id)?1:0.35);
+      node.selectAll('.node-glow').attr('opacity',d=>matchIds.has(d.id)?0.12:0.03);
+      labels.attr('opacity',d=>matchIds.has(d.id)?1:0.4);
+      link.style('display',l=>{
+        const sid=typeof l.source==='object'?l.source.id:l.source;
+        const tid=typeof l.target==='object'?l.target.id:l.target;
+        return (extended.has(sid)&&extended.has(tid))?'block':'none';
+      });
+      link.attr('stroke-opacity',l=>{
+        const sid=typeof l.source==='object'?l.source.id:l.source;
+        const tid=typeof l.target==='object'?l.target.id:l.target;
+        return (matchIds.has(sid)||matchIds.has(tid))?0.3:0.08;
+      });
+    }
+    simulation.alpha(0.3).restart();
+  });
+});
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+document.addEventListener('keydown', (e) => {
+  if (e.key==='Escape') { closePanel(); searchInput.value=''; searchInput.dispatchEvent(new Event('input')); }
+  if (e.key==='/' && document.activeElement!==searchInput) { e.preventDefault(); searchInput.focus(); }
+  if (e.key==='1') switchView('graph');
+  if (e.key==='2') switchView('calendar');
+  if (e.key==='3') switchView('mobile');
+});
+
+// ============================================================
+// INIT
+// ============================================================
+buildHotBanner();
+
+// Initial zoom to fit
+setTimeout(() => {
+  const bounds = container.node().getBBox();
+  const bannerH = bannerCollapsed ? 0 : 130;
+  const fW = width, fH = height - 56 - bannerH;
+  const scale = Math.min(fW/(bounds.width+100), fH/(bounds.height+100), 1.5) * 0.85;
+  const tx = fW/2 - (bounds.x + bounds.width/2)*scale;
+  const ty = (fH/2 + 56 + bannerH) - (bounds.y + bounds.height/2)*scale;
+  svg.transition().duration(1000).ease(d3.easeCubicOut)
+    .call(zoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
+}, 2000);
+
+// Auto-detect mobile
+if (window.innerWidth <= 600) {
+  switchView('mobile');
+  toggleBanner(); // start collapsed on mobile to save space
+}
+
+</script>
+</body>
+</html>
