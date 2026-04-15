@@ -747,7 +747,7 @@
     </tr><tr class="">
       <td><span class="admin-name" onclick="showDetail(nodes.find(n=&gt;n.id==='culver-wc'))">Culver WC</span></td>
       <td><span class="admin-case">WC-CM-870160</span></td>
-      <td><select class="admin-sel" data-id="culver-wc" data-field="matter_status" onchange="setAdminEdit('culver-wc','matter_status',this.value);this.classList.add('changed')">
+      <td><select class="admin-sel changed" data-id="culver-wc" data-field="matter_status" onchange="setAdminEdit('culver-wc','matter_status',this.value);this.classList.add('changed')">
         <option value="Open">Open</option><option value="Pending" selected="">Pending</option><option value="Closed">Closed</option>
       </select></td>
       <td><select class="admin-sel" data-id="culver-wc" data-field="matter_stage" onchange="setAdminEdit('culver-wc','matter_stage',this.value);this.classList.add('changed')">
@@ -755,7 +755,7 @@
       </select></td>
       <td><div class="admin-urg urg-none" onclick="cycleUrgency('culver-wc')" title="Click to cycle urgency"></div></td>
       <td><span class="admin-hearing">—</span></td>
-      <td><input type="text" class="admin-note changed" value="" placeholder="Quick note..." onchange="setAdminEdit('culver-wc','note',this.value);this.classList.add('changed')"></td>
+      <td><input type="text" class="admin-note" value="This file can be merged with culver v. noonan matter. then queue it up some where &quot;deleltions&quot; can live - so we can regularly check items you want to delete before we delete them." placeholder="Quick note..." onchange="setAdminEdit('culver-wc','note',this.value);this.classList.add('changed')"></td>
     </tr><tr class="">
       <td><span class="admin-name" onclick="showDetail(nodes.find(n=&gt;n.id==='dillard'))">Dillard</span></td>
       <td><span class="admin-case">CR-25-010297</span></td>
@@ -961,7 +961,7 @@
       <td><span class="admin-hearing">—</span></td>
       <td><input type="text" class="admin-note" value="" placeholder="Quick note..." onchange="setAdminEdit('wolfe','note',this.value);this.classList.add('changed')"></td>
     </tr></tbody></table></div></div></div>
-<div id="admin-toast" class="admin-toast"></div>
+<div id="admin-toast" class="admin-toast success">Saved &amp; pushed to GitHub</div>
 
 <div id="detail-panel" class="">
   <div class="p-hdr">
