@@ -10,7 +10,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   *{margin:0;padding:0;box-sizing:border-box}
-  html{overflow:hidden;width:100%;max-width:100vw}
+  html{overflow:hidden;width:100%}
 
   :root{
     --clr-matter:#60a5fa;  /* blue */
@@ -30,7 +30,7 @@
   body{
     font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
     background:var(--bg);color:#e2e8f0;
-    overflow:hidden;height:100vh;width:100%;max-width:100vw;
+    overflow:hidden;height:100vh;width:100%;
   }
 
   /* ===== TOP BAR ===== */
@@ -108,7 +108,7 @@
   .hc-t{font-size:11px;color:#94a3b8;line-height:1.4}
 
   /* ===== GRAPH ===== */
-  #graph-container{width:100%;height:100vh;position:relative;overflow:hidden;max-width:100vw}
+  #graph-container{width:100%;height:100vh;position:relative;overflow:hidden}
   svg{width:100%;height:100%;display:block;max-width:100%}
   .link{stroke-linecap:round}
   .node-label{font-family:'Inter',sans-serif;font-size:10px;fill:#e2e8f0;pointer-events:none;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#0a0e17;stroke-width:3px;stroke-linecap:round;stroke-linejoin:round}
@@ -176,7 +176,7 @@
 
   /* ===== DETAIL PANEL ===== */
   #detail-panel{
-    position:fixed;top:0;right:-420px;width:400px;max-width:100vw;
+    position:fixed;top:0;right:-420px;width:400px;max-width:100%;
     height:100vh;
     background:var(--bg-panel);backdrop-filter:blur(24px);
     border-left:1px solid rgba(255,255,255,.06);
@@ -310,6 +310,23 @@
     /* MOBILE ZOOM CONTROLS */
     #zoom-controls{bottom:16px;right:8px}
     .zoom-btn{width:48px;height:48px;font-size:22px}
+  }
+
+  /* LANDSCAPE on mobile — detail panel as half-screen overlay */
+  @media(max-height:500px) and (orientation:landscape){
+    #detail-panel{width:50%;max-width:50%}
+    #detail-panel.open ~ #cards-view,
+    #detail-panel.open ~ #cal-view{padding-right:0}
+    #top-bar{min-height:44px;padding:4px 10px}
+    #top-bar h1{font-size:13px}
+    .hb-inner{padding:8px 12px 10px}
+    .hb-grid{max-height:60px}
+    .hc{min-width:140px;padding:6px 10px}
+    .hc-l{font-size:11px}
+    .hc-t{font-size:9px}
+    #hot-banner{max-height:140px}
+    .mob-inner{padding:10px 10px 60px}
+    .cal-inner{padding:10px 10px 60px}
   }
 </style>
 </head>
