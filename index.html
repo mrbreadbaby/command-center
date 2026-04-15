@@ -331,6 +331,70 @@
     .pipe-lane-cards{padding:10px 12px}
   }
 
+  /* ===== ADMIN VIEW ===== */
+  #admin-view{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg);z-index:50;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #admin-view.active{display:block}
+  .admin-inner{padding:16px 16px 80px;padding-top:var(--admin-top-pad,16px)}
+  .admin-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .admin-title{font-size:18px;font-weight:700;color:var(--text-heading);letter-spacing:-.3px}
+  .admin-changes{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:16px;background:rgba(245,158,11,.15);color:#f59e0b;font-size:11px;font-weight:700;transition:all .2s}
+  html.light .admin-changes{background:rgba(217,119,6,.1);color:#d97706}
+  .admin-changes.hidden{display:none}
+  .admin-save-btn{padding:8px 20px;border-radius:8px;background:rgba(99,102,241,.8);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;min-height:36px}
+  .admin-save-btn:hover{background:rgba(99,102,241,1)}
+  .admin-save-btn:active{transform:scale(.97)}
+  .admin-save-btn:disabled{opacity:.5;cursor:not-allowed}
+  .admin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none}
+  .admin-toast.show{opacity:1}
+  .admin-toast.success{background:#059669;color:#fff}
+  .admin-toast.error{background:#dc2626;color:#fff}
+
+  .admin-filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .admin-filter{padding:6px 10px;border-radius:6px;background:var(--surface-mid);border:1px solid var(--border-medium);color:var(--text-primary);font-size:11px;font-family:inherit;min-height:32px;cursor:pointer}
+  .admin-filter:focus{outline:none;border-color:rgba(99,102,241,.5)}
+
+  .admin-wrap{overflow-x:auto;border:1px solid var(--border-subtle);border-radius:10px;scrollbar-width:thin}
+  .admin-wrap::-webkit-scrollbar{height:6px}
+  .admin-wrap::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+  .admin-tbl{width:100%;border-collapse:collapse;min-width:900px}
+  .admin-tbl th{position:sticky;top:0;background:var(--surface-low);padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border-subtle);text-align:left;cursor:pointer;white-space:nowrap;user-select:none;z-index:2}
+  .admin-tbl th:hover{color:var(--text-heading)}
+  .admin-tbl th .sort-arrow{margin-left:4px;font-size:9px;opacity:.5}
+  .admin-tbl th.sorted .sort-arrow{opacity:1;color:var(--clr-matter)}
+  .admin-tbl td{padding:8px 12px;border-bottom:1px solid var(--border-subtle);font-size:12px;color:var(--text-primary);vertical-align:middle}
+  .admin-tbl tr:hover td{background:var(--surface-mid)}
+  .admin-tbl tr.row-overdue td{background:rgba(239,68,68,.04)}
+  .admin-tbl tr.row-today td{background:rgba(245,158,11,.04)}
+  .admin-tbl tr.row-upcoming td{background:rgba(59,130,246,.03)}
+  .admin-name{font-weight:600;color:var(--text-heading);cursor:pointer;white-space:nowrap}
+  .admin-name:hover{text-decoration:underline}
+  .admin-case{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);white-space:nowrap}
+  .admin-sel{padding:5px 8px;border-radius:6px;background:var(--surface-high);border:1px solid var(--border-medium);color:var(--text-primary);font-size:11px;font-family:inherit;cursor:pointer;min-height:30px;max-width:140px}
+  .admin-sel:focus{outline:none;border-color:rgba(99,102,241,.5)}
+  .admin-sel.changed{border-color:#f59e0b;background:rgba(245,158,11,.08)}
+  .admin-urg{width:28px;height:28px;border-radius:50%;border:2px solid var(--border-medium);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+  .admin-urg:hover{transform:scale(1.1)}
+  .admin-urg.urg-none{background:var(--surface-mid)}
+  .admin-urg.urg-upcoming{background:rgba(59,130,246,.2);border-color:#3b82f6}
+  .admin-urg.urg-today{background:rgba(245,158,11,.2);border-color:#f59e0b}
+  .admin-urg.urg-overdue{background:rgba(239,68,68,.2);border-color:#ef4444}
+  html.light .admin-urg.urg-upcoming{background:rgba(37,99,235,.12);border-color:#2563eb}
+  html.light .admin-urg.urg-today{background:rgba(217,119,6,.12);border-color:#d97706}
+  html.light .admin-urg.urg-overdue{background:rgba(220,38,38,.12);border-color:#dc2626}
+  .admin-note{padding:5px 8px;border-radius:6px;background:var(--surface-high);border:1px solid var(--border-medium);color:var(--text-primary);font-size:11px;font-family:inherit;width:100%;min-width:120px;min-height:30px}
+  .admin-note:focus{outline:none;border-color:rgba(99,102,241,.5)}
+  .admin-note.changed{border-color:#f59e0b;background:rgba(245,158,11,.08)}
+  .admin-hearing{font-size:11px;color:var(--text-secondary);white-space:nowrap}
+
+  @media(max-width:600px){
+    .admin-tbl{min-width:800px}
+    .admin-tbl td:first-child,.admin-tbl th:first-child{position:sticky;left:0;z-index:3;background:var(--bg)}
+    .admin-tbl tr:hover td:first-child{background:var(--surface-mid)}
+    .admin-tbl tr.row-overdue td:first-child{background:rgba(239,68,68,.04)}
+    .admin-tbl tr.row-today td:first-child{background:rgba(245,158,11,.04)}
+    .admin-tbl tr.row-upcoming td:first-child{background:rgba(59,130,246,.03)}
+  }
+
   /* ===== DETAIL PANEL ===== */
   #detail-panel{
     position:fixed;top:0;right:-110vw;width:400px;max-width:100%;
@@ -499,6 +563,7 @@
     <button class="view-btn" data-view="calendar" onclick="switchView('calendar')">Calendar</button>
     <button class="view-btn" data-view="cards" onclick="switchView('cards')">Cards</button>
     <button class="view-btn" data-view="pipeline" onclick="switchView('pipeline')">Pipeline</button>
+    <button class="view-btn" data-view="admin" onclick="switchView('admin')">Admin</button>
   </div>
   <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle theme">&#9790;</button>
   <div id="filter-bar">
@@ -531,6 +596,8 @@
 <div id="cal-view"></div>
 <div id="cards-view"></div>
 <div id="pipeline-view"></div>
+<div id="admin-view"></div>
+<div id="admin-toast" class="admin-toast"></div>
 
 <div id="detail-panel">
   <div class="p-hdr">
@@ -949,6 +1016,7 @@ function switchView(v) {
   document.getElementById('cal-view').className = v==='calendar'?'active':'';
   document.getElementById('cards-view').className = v==='cards'?'active':'';
   document.getElementById('pipeline-view').className = v==='pipeline'?'active':'';
+  document.getElementById('admin-view').className = v==='admin'?'active':'';
   document.getElementById('legend').style.display = v==='graph'?'flex':'none';
   document.getElementById('stats').style.display = v==='graph'?'flex':'none';
   document.getElementById('filter-bar').style.display = v==='graph'?'flex':'none';
@@ -957,6 +1025,7 @@ function switchView(v) {
   if(v==='calendar'){ updateContentPadding(); buildCalendar(); }
   if(v==='cards'){ updateContentPadding(); buildCards(); }
   if(v==='pipeline'){ updateContentPadding(); buildPipeline(); }
+  if(v==='admin'){ updateContentPadding(); buildAdmin(); }
 }
 
 function toggleBanner(){
@@ -973,6 +1042,7 @@ function updateContentPadding(){
   document.documentElement.style.setProperty('--cal-top-pad',(bannerH+12)+'px');
   document.documentElement.style.setProperty('--cards-top-pad',(bannerH+8)+'px');
   document.documentElement.style.setProperty('--pipe-top-pad',(bannerH+8)+'px');
+  document.documentElement.style.setProperty('--admin-top-pad',(bannerH+8)+'px');
 }
 
 // ============================================================
@@ -1344,6 +1414,230 @@ function buildPipeline(){
 }
 
 // ============================================================
+// ADMIN VIEW
+// ============================================================
+const STAGES=['Intake','Arraignment','Discovery','Preliminary Hearing','Pre-trial Motions','Trial Prep','Trial','Sentencing','Post-Conviction'];
+const STATUSES=['Open','Pending','Closed'];
+const URG_CYCLE=['none','upcoming','today','overdue'];
+let adminEdits={};  // {nodeId: {field:newVal, ...}}
+let adminSort={col:'label',dir:'asc'};
+let adminFilters={status:'all',stage:'all',urgency:'all'};
+
+function adminChangeCount(){return Object.keys(adminEdits).length}
+
+function getNodeUrgency(id){
+  if(adminEdits[id]&&adminEdits[id].urgency!==undefined) return adminEdits[id].urgency;
+  const h=hotItems[id];
+  if(!h) return 'none';
+  return h.urgency;
+}
+
+function getNodeField(nd, field){
+  if(adminEdits[nd.id]&&adminEdits[nd.id][field]!==undefined) return adminEdits[nd.id][field];
+  if(field==='matter_status') return nd.matter_status||'Open';
+  if(field==='matter_stage') return nd.matter_stage||'Intake';
+  if(field==='note') return nd._adminNote||'';
+  return nd[field]||'';
+}
+
+function setAdminEdit(id, field, val){
+  if(!adminEdits[id]) adminEdits[id]={};
+  adminEdits[id][field]=val;
+  updateAdminBadge();
+}
+
+function updateAdminBadge(){
+  const ct=adminChangeCount();
+  const badge=document.getElementById('admin-change-badge');
+  if(badge){badge.textContent=ct+' change'+(ct!==1?'s':'');badge.classList.toggle('hidden',ct===0)}
+  const btn=document.getElementById('admin-save-btn');
+  if(btn) btn.disabled=ct===0;
+}
+
+function cycleUrgency(id){
+  const cur=getNodeUrgency(id);
+  const idx=URG_CYCLE.indexOf(cur);
+  const next=URG_CYCLE[(idx+1)%URG_CYCLE.length];
+  setAdminEdit(id,'urgency',next);
+  buildAdmin();
+}
+
+function buildAdmin(){
+  const c=document.getElementById('admin-view');
+  const matters=nodes.filter(n=>n.type==='matter');
+
+  // Apply filters
+  let filtered=matters.filter(m=>{
+    if(adminFilters.status!=='all'&&getNodeField(m,'matter_status')!==adminFilters.status) return false;
+    if(adminFilters.stage!=='all'&&getNodeField(m,'matter_stage')!==adminFilters.stage) return false;
+    if(adminFilters.urgency!=='all'){
+      const u=getNodeUrgency(m.id);
+      if(adminFilters.urgency==='none'&&u!=='none') return false;
+      if(adminFilters.urgency!=='none'&&u!==adminFilters.urgency) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a,b)=>{
+    let va,vb;
+    const col=adminSort.col;
+    if(col==='label'){va=a.label;vb=b.label}
+    else if(col==='case'){va=(a.detail?.caseNo||'');vb=(b.detail?.caseNo||'')}
+    else if(col==='status'){va=getNodeField(a,'matter_status');vb=getNodeField(b,'matter_status')}
+    else if(col==='stage'){va=STAGES.indexOf(getNodeField(a,'matter_stage'));vb=STAGES.indexOf(getNodeField(b,'matter_stage'))}
+    else if(col==='urgency'){const o={overdue:0,today:1,upcoming:2,none:3};va=o[getNodeUrgency(a.id)]??3;vb=o[getNodeUrgency(b.id)]??3}
+    else if(col==='hearing'){va=(a.detail?.nextHearing||'zzz');vb=(b.detail?.nextHearing||'zzz')}
+    else{va=a.label;vb=b.label}
+    if(typeof va==='number'&&typeof vb==='number') return adminSort.dir==='asc'?va-vb:vb-va;
+    return adminSort.dir==='asc'?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));
+  });
+
+  const chg=adminChangeCount();
+  const arrow=(col)=>adminSort.col===col?`<span class="sort-arrow">${adminSort.dir==='asc'?'▲':'▼'}</span>`:'<span class="sort-arrow">⇅</span>';
+  const thCls=(col)=>adminSort.col===col?' sorted':'';
+
+  let h='<div class="admin-inner">';
+  h+=`<div class="admin-hdr">
+    <span class="admin-title">Admin — Matters (${filtered.length})</span>
+    <span id="admin-change-badge" class="admin-changes${chg===0?' hidden':''}">${chg} change${chg!==1?'s':''}</span>
+    <button id="admin-save-btn" class="admin-save-btn" onclick="adminSave()"${chg===0?' disabled':''}>Save Changes</button>
+  </div>`;
+
+  // Filters
+  h+=`<div class="admin-filters">
+    <select class="admin-filter" onchange="adminFilters.status=this.value;buildAdmin()">
+      <option value="all"${adminFilters.status==='all'?' selected':''}>All Status</option>
+      ${STATUSES.map(s=>`<option value="${s}"${adminFilters.status===s?' selected':''}>${s}</option>`).join('')}
+    </select>
+    <select class="admin-filter" onchange="adminFilters.stage=this.value;buildAdmin()">
+      <option value="all"${adminFilters.stage==='all'?' selected':''}>All Stages</option>
+      ${STAGES.map(s=>`<option value="${s}"${adminFilters.stage===s?' selected':''}>${s}</option>`).join('')}
+    </select>
+    <select class="admin-filter" onchange="adminFilters.urgency=this.value;buildAdmin()">
+      <option value="all"${adminFilters.urgency==='all'?' selected':''}>All Urgency</option>
+      <option value="overdue"${adminFilters.urgency==='overdue'?' selected':''}>Overdue</option>
+      <option value="today"${adminFilters.urgency==='today'?' selected':''}>Today</option>
+      <option value="upcoming"${adminFilters.urgency==='upcoming'?' selected':''}>Upcoming</option>
+      <option value="none"${adminFilters.urgency==='none'?' selected':''}>None</option>
+    </select>
+  </div>`;
+
+  h+=`<div class="admin-wrap"><table class="admin-tbl">
+    <thead><tr>
+      <th class="${thCls('label')}" onclick="adminSortBy('label')">Matter ${arrow('label')}</th>
+      <th class="${thCls('case')}" onclick="adminSortBy('case')">Case # ${arrow('case')}</th>
+      <th class="${thCls('status')}" onclick="adminSortBy('status')">Status ${arrow('status')}</th>
+      <th class="${thCls('stage')}" onclick="adminSortBy('stage')">Stage ${arrow('stage')}</th>
+      <th class="${thCls('urgency')}" onclick="adminSortBy('urgency')">Urg ${arrow('urgency')}</th>
+      <th class="${thCls('hearing')}" onclick="adminSortBy('hearing')">Next Hearing ${arrow('hearing')}</th>
+      <th>Notes</th>
+    </tr></thead><tbody>`;
+
+  filtered.forEach(m=>{
+    const urg=getNodeUrgency(m.id);
+    const status=getNodeField(m,'matter_status');
+    const stage=getNodeField(m,'matter_stage');
+    const note=getNodeField(m,'note');
+    const rowCls=urg==='overdue'?' row-overdue':urg==='today'?' row-today':urg==='upcoming'?' row-upcoming':'';
+    const urgCls='urg-'+urg;
+    const urgDot=urg==='overdue'?'●':urg==='today'?'●':urg==='upcoming'?'●':'';
+    const urgColor=urg==='overdue'?'#ef4444':urg==='today'?'#f59e0b':urg==='upcoming'?'#3b82f6':'';
+    const statusChanged=adminEdits[m.id]?.matter_status!==undefined?' changed':'';
+    const stageChanged=adminEdits[m.id]?.matter_stage!==undefined?' changed':'';
+    const noteChanged=adminEdits[m.id]?.note!==undefined?' changed':'';
+
+    h+=`<tr class="${rowCls}">
+      <td><span class="admin-name" onclick="showDetail(nodes.find(n=>n.id==='${m.id}'))">${m.label}</span></td>
+      <td><span class="admin-case">${m.detail?.caseNo||'—'}</span></td>
+      <td><select class="admin-sel${statusChanged}" data-id="${m.id}" data-field="matter_status" onchange="setAdminEdit('${m.id}','matter_status',this.value);this.classList.add('changed')">
+        ${STATUSES.map(s=>`<option value="${s}"${status===s?' selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td><select class="admin-sel${stageChanged}" data-id="${m.id}" data-field="matter_stage" onchange="setAdminEdit('${m.id}','matter_stage',this.value);this.classList.add('changed')">
+        ${STAGES.map(s=>`<option value="${s}"${stage===s?' selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td><div class="admin-urg ${urgCls}" onclick="cycleUrgency('${m.id}')" title="Click to cycle urgency">${urgDot?`<span style="color:${urgColor}">${urgDot}</span>`:''}</div></td>
+      <td><span class="admin-hearing">${m.detail?.nextHearing||'—'}</span></td>
+      <td><input type="text" class="admin-note${noteChanged}" value="${note.replace(/"/g,'&quot;')}" placeholder="Quick note..." onchange="setAdminEdit('${m.id}','note',this.value);this.classList.add('changed')" /></td>
+    </tr>`;
+  });
+
+  h+='</tbody></table></div></div>';
+  c.innerHTML=h;
+}
+
+function adminSortBy(col){
+  if(adminSort.col===col) adminSort.dir=adminSort.dir==='asc'?'desc':'asc';
+  else{adminSort.col=col;adminSort.dir='asc'}
+  buildAdmin();
+}
+
+async function adminSave(){
+  const btn=document.getElementById('admin-save-btn');
+  btn.textContent='Saving...';btn.disabled=true;
+
+  // Apply edits to nodes
+  Object.entries(adminEdits).forEach(([id,edits])=>{
+    const nd=nodes.find(n=>n.id===id);
+    if(!nd) return;
+    if(edits.matter_status!==undefined) nd.matter_status=edits.matter_status;
+    if(edits.matter_stage!==undefined) nd.matter_stage=edits.matter_stage;
+    if(edits.note!==undefined) nd._adminNote=edits.note;
+    if(edits.urgency!==undefined){
+      if(edits.urgency==='none'){
+        delete hotItems[id];
+        nd.hot=false;
+      } else {
+        hotItems[id]={urgency:edits.urgency, text:hotItems[id]?.text||'Updated via Admin', date:hotItems[id]?.date||'2026-04-15'};
+        nd.hot=true;
+      }
+    }
+  });
+
+  // Push to GitHub — token loaded at runtime via prompt or pre-set
+  try {
+    const token=window._ghToken||prompt('GitHub token (from .github-token):');
+    if(!token){showToast('Save cancelled — no token','error');btn.textContent='Save Changes';btn.disabled=false;return}
+    window._ghToken=token;
+    // Get current SHA
+    const shaResp=await fetch('https://api.github.com/repos/mrbreadbaby/practice-wiki-map/contents/index.html',{
+      headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}
+    });
+    const shaData=await shaResp.json();
+    const sha=shaData.sha;
+
+    // Get current page HTML
+    const html=document.documentElement.outerHTML;
+    const b64=btoa(unescape(encodeURIComponent('<!DOCTYPE html>\n'+html)));
+
+    const pushResp=await fetch('https://api.github.com/repos/mrbreadbaby/practice-wiki-map/contents/index.html',{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify({message:'Admin: update matter data',content:b64,sha:sha,committer:{name:'Jeremy Pemberton',email:'jerwalter@gmail.com'}})
+    });
+
+    if(pushResp.ok){
+      adminEdits={};
+      showToast('Saved & pushed to GitHub','success');
+      buildAdmin();
+      buildHotBanner();
+    } else {
+      const err=await pushResp.json();
+      showToast('Push failed: '+(err.message||'unknown'),'error');
+    }
+  } catch(e){
+    showToast('Error: '+e.message,'error');
+  }
+  btn.textContent='Save Changes';btn.disabled=adminChangeCount()===0;
+}
+
+function showToast(msg,type){
+  const t=document.getElementById('admin-toast');
+  t.textContent=msg;t.className='admin-toast show '+type;
+  setTimeout(()=>{t.classList.remove('show')},3000);
+}
+
+// ============================================================
 // THEME TOGGLE
 // ============================================================
 let isDark = true;
@@ -1384,6 +1678,7 @@ function updateGraphTheme(){
   if(currentView==='calendar') buildCalendar();
   if(currentView==='cards') buildCards();
   if(currentView==='pipeline') buildPipeline();
+  if(currentView==='admin') buildAdmin();
   buildHotBanner();
 }
 
@@ -1394,6 +1689,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='2') switchView('calendar');
   if(e.key==='3') switchView('cards');
   if(e.key==='4') switchView('pipeline');
+  if(e.key==='5') switchView('admin');
 });
 
 initGraph();
