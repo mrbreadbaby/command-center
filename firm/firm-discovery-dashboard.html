@@ -285,7 +285,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
     <h1 style="margin-bottom:0;">Discovery — cross-matter intake & status</h1>
     <p class="tagline">Inbound discovery activity, JWN approval queue, producer batches, and PC § 1054.1 checklist coverage for <code>discovery@noonanlawoffices.com</code>.</p>
   </div>
-  <span class="refresh-stamp">Snapshot — <strong>2026-05-05 04:40 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
+  <span class="refresh-stamp">Snapshot — <strong>2026-05-05 15:48 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
 </header>
 
 <section class="hero-wrap">
@@ -320,6 +320,10 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
     <div class="kpi-sub">incomplete-chain / mid-stream pickups</div>
   </div>
 </div>
+
+<h2>🚨 Action Needed <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">3 open · 2 critical</span></h2>
+<p class="tagline">Per-batch action items aggregated from <code>DISCOVERY-RECEIPT.md</code> files in Drive (via <code>console/registry/discovery-action-items.json</code>). Critical = credentials/expired; warning = expiring soon / partial / redaction; info = awaiting review/approval. Sorted by severity then deadline.</p>
+<div id="action_needed"></div>
 
 <h2>Action items today <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">8 items</span></h2>
 <p class="tagline">JWN approval queue + variance / incomplete-chain / stale flags + outstanding § 1054.1 gaps with hard deadlines. Newest deadlines first. Click any row to jump to the matter.</p>
@@ -1138,6 +1142,47 @@ const ACTION_ITEMS = [
     "deadline": "2026-04-29"
   }
 ];
+const ACTION_NEEDED = [
+  {
+    "matter": "Reyes, Joshua - CR-25-013365",
+    "case_number": "CR-25-013365",
+    "drive_folder_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST",
+    "completeness_flag": "pending",
+    "batch_id": "2026-04-08_Stanislaus-DA",
+    "code": "ftp-passcode-needed",
+    "description": "Call 209-525-5550 to obtain Stanislaus DA Serv-U FTP passcode. DA refused to email passcode (verbal-only policy).",
+    "deadline": "2026-07-08",
+    "days_until": 63,
+    "severity": "crit",
+    "receipt_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST"
+  },
+  {
+    "matter": "Reyes, Joshua - CR-25-013365",
+    "case_number": "CR-25-013365",
+    "drive_folder_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST",
+    "completeness_flag": "pending",
+    "batch_id": "2026-04-08_EDiscovery-DA-OME",
+    "code": "ome-encrypted",
+    "description": "EDiscovery-DA Microsoft-OME message requires recipient password. Provision OME password for discovery@ (or use one-time passcode link inside encrypted wrapper).",
+    "deadline": null,
+    "days_until": null,
+    "severity": "crit",
+    "receipt_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST"
+  },
+  {
+    "matter": "Reyes, Joshua - CR-25-013365",
+    "case_number": "CR-25-013365",
+    "drive_folder_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST",
+    "completeness_flag": "pending",
+    "batch_id": "2026-04-08_Axon",
+    "code": "expiring-soon",
+    "description": "Axon Evidence.com share link expires 2026-07-08. Download and archive to Drive before expiry. ~64 days from receipt.",
+    "deadline": "2026-07-08",
+    "days_until": 63,
+    "severity": "warn",
+    "receipt_url": "https://drive.google.com/drive/folders/PENDING-FIRST-INGEST"
+  }
+];
 const VELOCITY = {"days": ["04-29", "04-30", "05-01", "05-02", "05-03", "05-04", "05-05"], "series": {"San Joaquin DA": [3, 0, 3, 0, 0, 0, 0]}};
 const CATEGORIES = ["Police reports", "PC declaration", "Charging document", "Defendant statements", "Witness statements", "BWC footage", "In-car/dashcam/surveillance", "Audio interviews", "Lab/forensic/chain-of-custody", "Defendant criminal history", "Search warrant materials", "Felony exhibits", "411 statements", "411 felony statements", "Other discovery"];
 
@@ -1148,8 +1193,65 @@ function escapeHtml(s) {
 }
 function slug(s) { return String(s).replace(/[^a-z0-9]+/gi,'-').toLowerCase(); }
 
-// ---------------- Action items today (Q1 — JWN + flags merged) ----------------
+// ---------------- Action Needed (v1.3+ — receipt-aggregated, per-batch) ----------------
 const sevColor = { crit: '#b8443f', warn: '#c08a3a', info: '#1f5fbf', good: '#2f7a4a' };
+const codeLabel = {
+  'pending-credentials': 'Credentials needed',
+  'ftp-passcode-needed': 'FTP passcode (verbal)',
+  'axon-password-needed': 'Axon password',
+  'ome-encrypted': 'OME-encrypted — recipient password',
+  'expired-link': 'Link expired',
+  'expiring-soon': 'Expires soon',
+  'partial-batch': 'More to follow',
+  'missing-attachment': 'Missing attachment',
+  'redaction-needed': 'Awaiting redaction',
+  'awaiting-client-review': 'Awaiting client review',
+  'awaiting-jwn-approval': 'Awaiting JWN approval',
+  'other': 'Other',
+};
+const anHtml = ACTION_NEEDED.map(a => {
+  const days = a.days_until;
+  let dlBadge = '';
+  if (a.deadline) {
+    if (days != null && days <= 7) dlBadge = `<span class="flag-badge crit" style="margin-left:.4em;">${days}d</span>`;
+    else if (days != null && days <= 30) dlBadge = `<span class="flag-badge warn" style="margin-left:.4em;">${days}d</span>`;
+    else dlBadge = `<span class="flag-badge info" style="margin-left:.4em;">${escapeHtml(a.deadline)}</span>`;
+  }
+  const driveLink = a.drive_folder_url && a.drive_folder_url !== '' && !a.drive_folder_url.includes('PENDING')
+    ? `<a href="${escapeHtml(a.drive_folder_url)}" target="_blank" rel="noopener">Drive ↗</a>`
+    : `<span style="color:#888;">Drive — pending first ingest</span>`;
+  const receiptLink = a.receipt_url && a.receipt_url !== '' && !a.receipt_url.includes('PENDING')
+    ? `<a href="${escapeHtml(a.receipt_url)}" target="_blank" rel="noopener">Receipt ↗</a>`
+    : '';
+  return `
+    <div class="card" style="border-left:4px solid ${sevColor[a.severity]||'#888'}; padding:.75em 1em; margin:.55rem 0;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; flex-wrap:wrap;">
+        <div style="flex:1 1 60%; min-width:260px;">
+          <div style="display:flex; gap:.4em; align-items:center; flex-wrap:wrap; margin-bottom:.25em;">
+            <span class="flag-badge ${a.severity}">${a.severity.toUpperCase()}</span>
+            <strong>${escapeHtml(a.matter)}</strong>
+            <code>${escapeHtml(a.case_number)}</code>
+            ${dlBadge}
+          </div>
+          <div style="font-weight:600; color:#2a4a78; margin:.15em 0;">${escapeHtml(codeLabel[a.code] || a.code)}</div>
+          <div style="color:#333; font-size:.95em;">${escapeHtml(a.description)}</div>
+          <div style="font-size:.82em; color:#666; margin-top:.35em;">
+            Batch: <code>${escapeHtml(a.batch_id)}</code>
+          </div>
+        </div>
+        <div style="flex:0 0 auto; display:flex; gap:.6em; align-items:center; font-size:.88em;">
+          ${driveLink}
+          ${receiptLink}
+        </div>
+      </div>
+    </div>`;
+}).join('');
+const anEl = document.getElementById('action_needed');
+if (anEl) {
+  anEl.innerHTML = anHtml || '<p style="color:#2f7a4a; padding:.5em 0;">No open action items. All discovery batches are processed or in JWN-gated review.</p>';
+}
+
+// ---------------- Action items today (Q1 — JWN + flags merged) ----------------
 const aiHtml = ACTION_ITEMS.map(a => {
   const targetId = 'matter-' + slug(a.matter + '-' + a.case);
   return `
