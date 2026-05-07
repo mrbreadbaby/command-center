@@ -285,7 +285,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
     <h1 style="margin-bottom:0;">Discovery — cross-matter intake & status</h1>
     <p class="tagline">Inbound discovery activity, JWN approval queue, producer batches, and PC § 1054.1 checklist coverage for <code>discovery@noonanlawoffices.com</code>.</p>
   </div>
-  <span class="refresh-stamp">Snapshot — <strong>2026-05-06 04:39 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
+  <span class="refresh-stamp">Snapshot — <strong>2026-05-07 10:02 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
 </header>
 
 <section class="hero-wrap">
@@ -321,7 +321,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
   </div>
 </div>
 
-<h2>🚨 Action Needed <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">3 open · 2 critical</span></h2>
+<h2>🚨 Action Needed <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">16 open · 2 critical</span></h2>
 <p class="tagline">Per-batch action items aggregated from <code>DISCOVERY-RECEIPT.md</code> files in Drive (via <code>console/registry/discovery-action-items.json</code>). Critical = credentials/expired; warning = expiring soon / partial / redaction; info = awaiting review/approval. Sorted by severity then deadline.</p>
 <div id="action_needed"></div>
 
@@ -1152,7 +1152,7 @@ const ACTION_NEEDED = [
     "code": "ftp-passcode-needed",
     "description": "Call 209-525-5550 to obtain Stanislaus DA Serv-U FTP passcode. DA refused to email passcode (verbal-only policy).",
     "deadline": "2026-07-08",
-    "days_until": 62,
+    "days_until": 61,
     "severity": "crit",
     "receipt_url": "https://drive.google.com/file/d/13uTEe1PT2WxxPOiV5vzntotJtLlWiMMs/view"
   },
@@ -1178,12 +1178,181 @@ const ACTION_NEEDED = [
     "code": "expiring-soon",
     "description": "Axon Evidence.com share link expires 2026-07-08. Download and archive to Drive before expiry. ~64 days from receipt.",
     "deadline": "2026-07-08",
-    "days_until": 62,
+    "days_until": 61,
     "severity": "warn",
     "receipt_url": "https://drive.google.com/file/d/1ioWUyhgZzASkKHjZdh-ofXWdSZDaPrHP/view"
+  },
+  {
+    "matter": "Brown, Clifford - CR-25-003661",
+    "case_number": "CR-25-003661",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter (substantive 10-item demand, DDA Aleman) DRAFT pending JWN review. Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Garcia, Enrique - 25-CR-010940",
+    "case_number": "25-CR-010940",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review (ADA Elgin Lowe). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Hunter, Artis - 24FE14307",
+    "case_number": "24FE14307",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Follow-up demand for 9 outstanding \u00a7 1054.1 categories DRAFT pending JWN review (Sacramento DA, DDA Lee referenced \u2014 full name TBD). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Hunter, Artis - 24FE14307",
+    "case_number": "24FE14307",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_yahoo-dda-confirmed",
+    "code": "awaiting-jwn-approval",
+    "description": "DDA Danny Lee (leed@sacda.org) confirmed via Yahoo sweep \u2014 letter regenerated.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Kramer, Tyler - TBD",
+    "case_number": null,
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review (Alameda generic intake; no DDA assigned). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Navarro, Isaiah - CR-24-001345",
+    "case_number": "CR-24-001345",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review (DDA Edward Alan McGarvey). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Navarro, Isaiah - CR-24-001345 (companion 26-CR-005842)",
+    "case_number": "26-CR-005842",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review \u2014 companion docket; DDA TBD. Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Retana, Adolfo - CR-26-000136",
+    "case_number": "CR-26-000136",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Follow-up discovery NUDGE letter DRAFT pending JWN review (DDA Carsyn Henry; promised 4/22, no production). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Rodrigues, Derek - CR-21-004636",
+    "case_number": "CR-21-004636",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review (DDA Amanda Michelle Chavez). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Ruiz Salas, Raul - CR-23-009962",
+    "case_number": "23-CR-009962",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Follow-up discovery / Brady demand DRAFT pending JWN review (DDA TBD). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Ruiz Salas, Raul - CR-23-009962",
+    "case_number": "23-CR-009962",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_yahoo-dda-confirmed",
+    "code": "awaiting-jwn-approval",
+    "description": "DDA Ajaypal Singh (ajaypal.singh@acgov.org) confirmed via Yahoo sweep \u2014 letter regenerated.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Weaver, Jeremiah - 25-CR-005354",
+    "case_number": "25-CR-005354",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_outbound-discovery-demand",
+    "code": "awaiting-jwn-approval",
+    "description": "Discovery request letter DRAFT pending JWN review (DDA TBD). Letter PDF + Gmail draft staged.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
+  },
+  {
+    "matter": "Weaver, Jeremiah - 25-CR-005354",
+    "case_number": "25-CR-005354",
+    "drive_folder_url": null,
+    "completeness_flag": "outbound-demand-drafted",
+    "batch_id": "2026-05-06_yahoo-dda-confirmed",
+    "code": "awaiting-jwn-approval",
+    "description": "DDA Jacq Wilson (jacq.wilson@acgov.org) confirmed via Yahoo sweep \u2014 letter regenerated as NUDGE.",
+    "deadline": "2026-05-21",
+    "days_until": 13,
+    "severity": "info",
+    "receipt_url": null
   }
 ];
-const VELOCITY = {"days": ["04-30", "05-01", "05-02", "05-03", "05-04", "05-05", "05-06"], "series": {"San Joaquin DA": [0, 3, 0, 0, 0, 0, 0]}};
+const VELOCITY = {"days": ["05-01", "05-02", "05-03", "05-04", "05-05", "05-06", "05-07"], "series": {"San Joaquin DA": [3, 0, 0, 0, 0, 0, 0]}};
 const CATEGORIES = ["Police reports", "PC declaration", "Charging document", "Defendant statements", "Witness statements", "BWC footage", "In-car/dashcam/surveillance", "Audio interviews", "Lab/forensic/chain-of-custody", "Defendant criminal history", "Search warrant materials", "Felony exhibits", "411 statements", "411 felony statements", "Other discovery"];
 
 function escapeHtml(s) {
