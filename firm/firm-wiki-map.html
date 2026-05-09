@@ -2042,6 +2042,163 @@ const nodes = [
       "client": "",
       "summary": ""
     }
+  },
+  {
+    "id": "active-matter-lists-go-stale",
+    "label": "Active matter lists go stale",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Active matter lists go stale",
+      "summary": "**Pattern:** Project Instructions that enumerate \"active matters\" diverge from `~/Documents/Cases/<Project>/Active/` reality fast — writers list from memory or a stale audit snapshot rather than `ls Active/` at edit time.",
+      "affects": [
+        "all-projects"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 v3 accuracy pass",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-active-matter-lists-stale.md"
+    }
+  },
+  {
+    "id": "bates-vs-file-naming-conventions",
+    "label": "Bates vs file-naming conventions",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Bates vs file-naming conventions",
+      "summary": "**Pattern:** Two distinct conventions were conflated in early v3 Global Instructions:",
+      "affects": [
+        "all-projects-with-discovery"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 v3 accuracy pass",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-bates-vs-file-naming.md"
+    }
+  },
+  {
+    "id": "cowork-project-folders-vs-auto-memory-spaces",
+    "label": "Cowork Project folders vs auto-memory Spaces",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Cowork Project folders vs auto-memory Spaces",
+      "summary": "**Pattern:** Two distinct concepts that look correlated:",
+      "affects": [
+        "claude-operations",
+        "all-projects-meta"
+      ],
+      "discoveredIn": "Claude Operations Phase B execution 2026-05-09 evening",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-cowork-projects-vs-spaces-distinction.md"
+    }
+  },
+  {
+    "id": "matter-folder-canonical-structure-drift",
+    "label": "Matter folder canonical structure drift",
+    "type": "issue",
+    "status": "open",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Matter folder canonical structure drift",
+      "summary": "**Pattern:** Matter folder layouts drifted across six months as the canonical structure evolved phase-by-phase. Some matters use older variants (Sawyer's third variant; Silva v. Billingsley's older Noonan variant). The Stage-2 v3 templates also used a stale `_TEMPLATE/00-Project-Wiki/` variant.",
+      "affects": [
+        "noonan",
+        "consulting",
+        "ammcg",
+        "sawyer",
+        "silva-v-billingsley"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 v3 accuracy pass",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-matter-folder-canonical-structure.md"
+    }
+  },
+  {
+    "id": "path-validation-required-in-instructions",
+    "label": "Path validation required in instructions",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Path validation required in instructions",
+      "summary": "**Pattern:** Writers wrote plausible-sounding paths from memory or outdated mental models instead of `ls`-ing the disk before committing. The 2026-05-09 accuracy pass found 5 stale paths in the v3 Stage-2 pack:",
+      "affects": [
+        "all-projects"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 v3 accuracy pass",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-path-validation-required.md"
+    }
+  },
+  {
+    "id": "plugin-uninstall-via-cowork-ui",
+    "label": "Plugin uninstall via Cowork UI",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Plugin uninstall via Cowork UI",
+      "summary": "**Pattern:** `claude plugin list` returned \"No plugins installed\" while Cowork manifest showed 12. The CLI (Claude Code) and the Cowork plugin runtime use separate registries.",
+      "affects": [
+        "claude-operations"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 v3 accuracy pass",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-plugin-uninstall-via-cowork-ui.md"
+    }
+  },
+  {
+    "id": "recusal-side-switch-conflict-former-defense-counsel-joins-da",
+    "label": "Recusal — Side-Switch Conflict (Former Defense Counsel Joins DA)",
+    "type": "issue",
+    "status": "current",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Recusal — Side-Switch Conflict (Former Defense Counsel Joins DA)",
+      "summary": "Defense attorney leaves defense practice and joins the prosecuting District Attorney's Office. Former clients are now being prosecuted by the office that employs their former attorney. The core issue: the attorney had access to confidential defense strategy, privileged communications, and case-speci",
+      "affects": [],
+      "discoveredIn": "",
+      "sourceRegister": ""
+    }
+  },
+  {
+    "id": "session-start-memory-read-mandatory",
+    "label": "Session start memory read mandatory",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "Session start memory read mandatory",
+      "summary": "**Pattern:** Two failures compounded — (1) the Cowork session-start auto-memory pointer resolves to per-space directory, but the canonical handoff entries lived in legacy `agent/memory/`; (2) Claude did not proactively read `agent/memory/MEMORY.md` despite Global Instructions describing it as the ca",
+      "affects": [
+        "all-projects"
+      ],
+      "discoveredIn": "Claude Operations 2026-05-09 morning post-Stage-2 close",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-session-start-memory-read.md"
+    }
+  },
+  {
+    "id": "uuid-bootstrap-and-session-metadata-mapping",
+    "label": "UUID bootstrap and session metadata mapping",
+    "type": "issue",
+    "status": "reapplied",
+    "hasPage": true,
+    "hot": false,
+    "detail": {
+      "title": "UUID bootstrap and session metadata mapping",
+      "summary": "**Pattern:** Phase B needed (1) UUIDs for every Cowork Project's Space (only 3 of 7 had Spaces on disk), and (2) authoritative mapping from each existing UUID to the Project that owns it. Best-guessing from memory contents was unreliable — `918d2999` looked Noonan-flavored but was AMMCG; `a367d2eb` ",
+      "affects": [
+        "claude-operations",
+        "future-cowork-project-setup"
+      ],
+      "discoveredIn": "Claude Operations Phase B execution 2026-05-09 evening",
+      "sourceRegister": "~/Documents/wiki/audits/improvements/2026-05-09-uuid-bootstrap-and-session-metadata-mapping.md"
+    }
   }
 ];
 
