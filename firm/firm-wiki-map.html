@@ -590,11 +590,10 @@
 <body>
 
 <nav class="firm-nav">
-  <a href="./">Index</a>
+  <a href="./">← Back to Noonan Law Dashboards</a>
   <a href="./firm-brief-latest.html">Brief</a>
   <a class="current" href="./firm-wiki-map.html">Wiki Map</a>
   <a href="./firm-voice-dashboard.html">Voice</a>
-  <a href="./firm-discovery-dashboard.html">Discovery</a>
   <a href="./firm-system-audit.html">System Audit</a>
   <a href="./firm-architecture-diagram.html">Architecture</a>
 </nav>
@@ -2411,99 +2410,90 @@ links.forEach(l => {
 });
 
 const hotItems = {
-  "mitchell": {
-    "urgency": "overdue",
-    "text": "**4/27 INDICATED-SENTENCE DENIED at hearing.** Christine relayed via iMessage that the family cannot continue funding representation; firm must withdraw and continue trial. **Same-day withdrawal + continuance packet built** at 01-Pleadings-and-Motions/file-ready-withdrawal-20260427/ (22-pp combined packet \u2014 Motion to Be Relieved as Counsel + Motion for Continuance + CR-003 + two Proposed Orders + combined POS + README + two service email drafts). **Awaiting JWN signatures + Dept. 9 clerk hearing date before filing.** Trial 6/15 Dept 9 still on calendar.",
-    "date": "2026-04-27"
-  },
   "wells": {
-    "urgency": "overdue",
-    "text": "PX 4/27 Dept 705 Nixon ECHOJ Dublin \u2014 outcome unconfirmed (2 days). Continuance motion FILED + SERVED 4/22 CA via Tyler eFileCA Alameda (DDAs Shukla + Basurto). \u00a7 859b 60-day outer deadline 2026-05-11 (11 days). Confirm ruling + JWN coverage.",
-    "date": "2026-04-27"
+    "urgency": "today",
+    "text": "**§ 859b 60-day outer deadline Sun 5/11/26 (2 days).** Continuance motion FILED + SERVED 4/22 via Tyler eFileCA Alameda (DDAs Shukla + Basurto). Client OR so § 859b(b) custody track inapplicable. Confirm court ruling + JWN coverage status before Sunday. PX 4/27 outcome remains unconfirmed.",
+    "date": "2026-05-11"
   },
-  "wolfe": {
-    "urgency": "overdue",
-    "text": "PX 4/29 PASSED — outcome [CONFIRM with Christine / docket pull] — was Wed 4/29 Dept 33 Santa Clara HOJ San Jose. Continuance motion FILED + SERVED 4/22 CA via Tyler eFileCA (DDA Maszara). v7 prep binder 268 pp / 40.6 MB (Sellers Tab 2A + Dinh DNA Tab 2B; expert in Korea until 5/5). If continuance denied, Christine covers. Firm-authored title spelling = WOLFE (no u).",
-    "date": "2026-04-29"
-  },
-  "blackwell": {
-    "urgency": "upcoming",
-    "text": "**\u00a7 1054.1 deficiency notice SENT 4/28 23:30** by Jeremy from admin@ to DDA Sjoberg (cc noonanlaw33@yahoo.com). **5/5/26 5:00 PM PT response deadline (5 days).** Hobbs packet still with JWN for review (Motion FINAL 18 pp + 162-pp Westlaw bundle + accepted-changes .docx + -JEREMY-TRACKED.docx audit). Sjoberg's 4/17 production bit-for-bit identical to 3/25 (all 69 SHA-256 hashes match). Hearing re-noticed 5/18 9:00 AM Dept 112 (18 days).",
-    "date": "2026-05-18"
+  "dillard": {
+    "urgency": "today",
+    "text": "**VTC probation review Sun 5/11/26 10:00 AM Stanislaus Dept 4 (2 days).** Static; covers 010297 + 011667.",
+    "date": "2026-05-11"
   },
   "hunter": {
+    "urgency": "today",
+    "text": "**5/12/26 8:30 AM Sacramento Dept 63 — setting/status hearing** (NOT contested PX). Mr. Hunter enters general time waiver, Yuri Hill formally relieved as CCD; PX gets calendared in Dept 9 from there. Thin appearance memo needed, not contested binder. DDA Danny Lee leed@sacda.org confirmed via Yahoo. Discovery follow-up demand drafted 5/6 — 9 outstanding § 1054.1 categories (BWC, dashcam, lab, RAP, search warrant, 911/CAD, formal Brady, audio interviews).",
+    "date": "2026-05-12"
+  },
+  "caldwell": {
     "urgency": "overdue",
-    "text": "Legal memo 26 DAYS OVERDUE (due 4/4); prelim 4/9 outcome unconfirmed 21 days; Tyler wrong account, eFile pivot pending.",
-    "date": "2026-04-04"
+    "text": "**Romero hearing was 5/7 8:30 AM Dept 2 Stanislaus.** Reply to People's late opposition v4 (13 pp) shipped 5/7 with timeliness opener + § 1385(c)(2)(H) substantive rebuttal (Vargas selective-quote attack + Strong pincite correction). Service draft + JWN approval draft staged in Gmail. Outcome unconfirmed.",
+    "date": "2026-05-07"
   },
   "rodgers": {
     "urgency": "overdue",
-    "text": "Dismissal motion 33 DAYS OVERDUE (since 3/28); Pitchess ruling 5/26 (26 days) before Hon. Israels.",
+    "text": "Dismissal motion 42 days overdue (since 3/28). Pitchess ruling 5/26 Dept 5 Israels (17 days).",
     "date": "2026-03-28"
   },
+  "navarro": {
+    "urgency": "upcoming",
+    "text": "**Recusal motion 5/29/26 8:30 AM Alameda Dept 711** (joint w/ Rodrigues; 20 days). **Continuance packet file-ready 5/9** at 01-Pleadings-and-Motions/file-ready-20260509/ — co-counsel team-representation framing per Christine + HIPAA-safe ICU phrasing. Awaiting JWN + Pemberton signatures. Companion 24-CR-003160 + rearrest 26-CR-005842 separate. DDA Edward Alan McGarvey; AG Caitlin Duprey.",
+    "date": "2026-05-29"
+  },
+  "rodrigues": {
+    "urgency": "upcoming",
+    "text": "**Recusal motion 5/29/26 8:30 AM Alameda Dept 711** (joint w/ Navarro Desouza; 20 days). **Continuance packet file-ready 5/9** at 01-Pleadings-and-Motions/file-ready-20260509/. Awaiting JWN + Pemberton signatures. DDA Amanda Michelle Chavez. Civil-claim deadline 6/9/26 independent of this continuance.",
+    "date": "2026-05-29"
+  },
   "ruiz-salas": {
-    "urgency": "overdue",
-    "text": "Hearing 4/10 outcome UNKNOWN 20 days; Brady letter still missing; portal lookup pending.",
-    "date": "2026-04-10"
+    "urgency": "upcoming",
+    "text": "**5/27/26 9:00 AM Alameda Dept 11 PTH** (18 days). Continuance packet file-ready 5/9 (Alpers batch). ⚠ STRATEGIC FLAG for JWN: Brady-letter pressure dynamic — defensible on Alpers grounds but JWN call on whether continuing 5/27 (and 6/16 PX) actually helps the Brady-pressure posture. Hearing 4/10 outcome remains unknown.",
+    "date": "2026-05-27"
   },
   "weaver": {
-    "urgency": "overdue",
-    "text": "PC 1001.36 motion FINALIZED 4/9 \u2014 filing + service status unconfirmed 21 days (blocked on eFile portal URL).",
-    "date": "2026-04-09"
-  },
-  "recusal-side-switch": {
-    "urgency": "overdue",
-    "text": "Billups bar complaint 15 DAYS OVERDUE (deferred 4/15 \u2192 4/20 \u2192 still pending; malpractice risk). MejiaMejia, Ruiz Salas, Rodgers, Rodrigues, Navarro, Mitchell all implicated.",
-    "date": "2026-04-15"
-  },
-  "billups-darryl": {
-    "urgency": "overdue",
-    "text": "Bar complaint 15 DAYS OVERDUE (deferred 4/15 \u2192 4/20 \u2192 still pending); screening gap Sept\u2013Dec 2025.",
-    "date": "2026-04-15"
-  },
-  "caldwell": {
     "urgency": "upcoming",
-    "text": "Romero 4/14 VACATED; reset Thu 5/7/26 8:30 AM Dept 2 Villalobos (7 days).",
-    "date": "2026-05-07"
+    "text": "**Disposition 5/26/26 9:00 AM Alameda Dept 104** (17 days). Continuance packet file-ready 5/9 (Alpers batch). DDA Courtney Mativia Tascoe-Burris. ⚠ Verify PC § 1001.36 motion was actually filed/served (4/9 finalization status was unconfirmed) before continuing the disposition. Possibly in custody — confirm.",
+    "date": "2026-05-26"
+  },
+  "blackwell": {
+    "urgency": "upcoming",
+    "text": "**Hobbs hearing 5/18/26 9:00 AM Dept 112 Alameda** (9 days). § 1054.1 deficiency notice sent 4/28; Sjoberg's 4/17 production bit-for-bit identical to 3/25 (all 69 SHA-256 hashes match). Hobbs Motion FINAL 18 pp + 162-pp Westlaw bundle awaits JWN review.",
+    "date": "2026-05-18"
+  },
+  "mitchell": {
+    "urgency": "upcoming",
+    "text": "**Trial 6/15/26 Dept 9 Stanislaus** (37 days). Pacheco lead per 4/27 family-funding-decision reversal. Indicated-Sentence motion DENIED 4/27. Withdrawal packet preserved at file-ready-withdrawal-20260427/ but shelved.",
+    "date": "2026-06-15"
   },
   "mejiamejia": {
     "urgency": "upcoming",
-    "text": "Jury trial 5/26/26 (26 days). Writ of prohibition pending before First DCA.",
+    "text": "**Jury trial 5/26/26 Alameda Dept 011** (17 days). Aundrea Brown is trial counsel of record, NOT Alpers — Alpers-incapacity continuance does not fit. Right move: First DCA writ-side status letter on Alpers' incapacity (separate work). Writ of prohibition pending First DCA. DDA John Ronald Pricco.",
     "date": "2026-05-26"
   },
-  "rafanello": {
-    "urgency": "overdue",
-    "text": "v4 package built 4/26; Cathy intake gate CLOSED 4/26 (~30-min recorded Zoom transcript at 09-Notes-and-Strategy/Rafanello-Call-Transcript-20260426.md). 5 of 6 gates remaining: JWN review, conflicts waiver, Westlaw v2 refresh, Gmail drafts regen, KeyCite pass. New v4 facts: $1.8M lost-pipeline anchor, severance NOT signed confirmed, 6 witnesses on Cathy's list, retainer 40%. **Noonan = HANDOFF ONLY** \u2014 Shegerian drafts + sends.",
-    "date": "2026-04-26"
-  },
-  "stan-dept-2": {
+  "mercer": {
     "urgency": "upcoming",
-    "text": "Caldwell Romero reset 5/7 8:30 AM (7 days) after 4/14 VACATED.",
-    "date": "2026-05-07"
-  },
-  "sacramento-county": {
-    "urgency": "overdue",
-    "text": "Hunter prelim 4/9 outcome unknown 21 days; Tyler eFile pivot pending.",
-    "date": "2026-04-09"
-  },
-  "garcia": {
-    "urgency": "overdue",
-    "text": "4/21 2:00 PM Dept 712 Dublin hearing PASSED \u2014 outcome UNKNOWN (8 days). PC 1001.95 diversion SHELVED 4/20 (client pivoted to DOJ track). Drafts preserved.",
-    "date": "2026-04-21"
-  },
-  "fuerch-stephen": {
-    "urgency": "overdue",
-    "text": "Blackwell Hobbs drafts with him since 3/27 (34 days); role effectively superseded by 4/23 Motion FINAL now with JWN. Culver 4/21 hearing covered as AOR (matter CLOSED 4/20)."
-  },
-  "dillard": {
-    "urgency": "upcoming",
-    "text": "VTC probation review Mon 5/11/26 10:00 AM Dept 4 (11 days).",
-    "date": "2026-05-11"
+    "text": "**SVP commitment hearing 6/15/26 Stanislaus Dept 3 Mangar** (37 days). Firm to formally appear (mother's pro per MTD procedurally invalid). Lead theory: WIC § 6601 facial failure (State substituted SVRAT score for required clinical evals). Westlaw research + Abbott retention letter + motion outline + records-pulls plan all in flight.",
+    "date": "2026-06-15"
   },
   "brown": {
     "urgency": "upcoming",
-    "text": "Preliminary hearing Tue 7/14/26 8:30 AM Dept 5 (75 days); Romero motion drafting pre-prelim.",
+    "text": "Preliminary hearing 7/14/26 8:30 AM Dept 5 Stanislaus (66 days). Romero motion in drafting (Cliff review).",
     "date": "2026-07-14"
+  },
+  "rafanello": {
+    "urgency": "upcoming",
+    "text": "v4 package built 4/26; Cathy intake gate CLOSED 4/26 (~30-min Zoom transcript at 09-Notes-and-Strategy/). 5 of 6 gates remaining: JWN review, conflicts waiver, Westlaw v2 refresh, Gmail drafts regen, KeyCite pass. **Noonan = HANDOFF ONLY** — Shegerian drafts + sends.",
+    "date": "2026-04-26"
+  },
+  "alpers-steven": {
+    "urgency": "upcoming",
+    "text": "**Co-counsel in ICU in critical condition since 5/1; rehabilitation expected.** Drives the 4 file-ready continuance packets (Navarro 5/29 / Rodrigues 5/29 / Ruiz Salas 5/27 / Weaver 5/26). Mejiamejia is NOT in the batch (Brown is trial counsel; First DCA writ status letter is the right move). Francesconi already handled by DDA Christiansen agreement to 6/15. Garcia diversion granted 4/21, next 7/24.",
+    "date": "2026-05-26"
+  },
+  "recusal-side-switch": {
+    "urgency": "upcoming",
+    "text": "Billups bar complaint still pending; deferred 4/15 → 4/20 → open. Side-switch implications across MejiaMejia, Ruiz Salas, Rodgers, Rodrigues, Navarro, Mitchell. Re-engage when Alpers continuance batch lands and bandwidth permits.",
+    "date": "2026-04-15"
   }
 };
 
