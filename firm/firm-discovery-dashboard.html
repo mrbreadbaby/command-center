@@ -285,7 +285,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
     <h1 style="margin-bottom:0;">Discovery — cross-matter intake & status</h1>
     <p class="tagline">Inbound discovery activity, JWN approval queue, producer batches, and PC § 1054.1 checklist coverage for <code>discovery@noonanlawoffices.com</code>.</p>
   </div>
-  <span class="refresh-stamp">Snapshot — <strong>2026-05-09 04:38 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
+  <span class="refresh-stamp">Snapshot — <strong>2026-05-10 04:38 UTC</strong> · live data + tracker xlsx as of 2026-05-01</span>
 </header>
 
 <section class="hero-wrap">
@@ -321,7 +321,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
   </div>
 </div>
 
-<h2>🚨 Action Needed <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">16 open · 2 critical</span></h2>
+<h2>🚨 Action Needed <span class="flag-badge crit" style="vertical-align:middle; margin-left:.4em;">21 open · 4 critical</span></h2>
 <p class="tagline">Per-batch action items aggregated from <code>DISCOVERY-RECEIPT.md</code> files in Drive (via <code>console/registry/discovery-action-items.json</code>). Critical = credentials/expired; warning = expiring soon / partial / redaction; info = awaiting review/approval. Sorted by severity then deadline.</p>
 <div id="action_needed"></div>
 
@@ -1152,9 +1152,35 @@ const ACTION_NEEDED = [
     "code": "ftp-passcode-needed",
     "description": "Call 209-525-5550 to obtain Stanislaus DA Serv-U FTP passcode. DA refused to email passcode (verbal-only policy).",
     "deadline": "2026-07-08",
-    "days_until": 59,
+    "days_until": 58,
     "severity": "crit",
     "receipt_url": "https://drive.google.com/file/d/13uTEe1PT2WxxPOiV5vzntotJtLlWiMMs/view"
+  },
+  {
+    "matter": "Mitchell, DeAndre - CR-22-002886",
+    "case_number": "CR-22-002886",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1hnOBP7zb-jEhIMFe5qpXkEo4Eb_MrMoI",
+    "completeness_flag": "pending",
+    "batch_id": "2026-04-30_StanislausDA_INV187",
+    "code": "pending-credentials",
+    "description": "DA Serv-U FTP host firewall-restricted; download must run from firm Mac mini (not session automation).",
+    "deadline": null,
+    "days_until": null,
+    "severity": "crit",
+    "receipt_url": "https://drive.google.com/drive/folders/16Jqc6VxAurWX57npQdQcJJGb6Ubj9AnV"
+  },
+  {
+    "matter": "Mitchell, DeAndre - CR-22-002886",
+    "case_number": "CR-22-002886",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1hnOBP7zb-jEhIMFe5qpXkEo4Eb_MrMoI",
+    "completeness_flag": "pending",
+    "batch_id": "2025-01-21_StanislausDA_INV187",
+    "code": "expired-link",
+    "description": "Original 1/21/25 FTP link expired 4/21/25. JWN re-request sent 5/9/26 9:51 PM to natalia.villegas@standa.org.",
+    "deadline": null,
+    "days_until": null,
+    "severity": "crit",
+    "receipt_url": "https://drive.google.com/drive/folders/1eDf5vnwEPsDSlctHaOfG8ZlGMabhHbpa"
   },
   {
     "matter": "Reyes, Joshua - CR-25-013365",
@@ -1178,9 +1204,48 @@ const ACTION_NEEDED = [
     "code": "expiring-soon",
     "description": "Axon Evidence.com share link expires 2026-07-08. Download and archive to Drive before expiry. ~64 days from receipt.",
     "deadline": "2026-07-08",
-    "days_until": 59,
+    "days_until": 58,
     "severity": "warn",
     "receipt_url": "https://drive.google.com/file/d/1ioWUyhgZzASkKHjZdh-ofXWdSZDaPrHP/view"
+  },
+  {
+    "matter": "Mitchell, DeAndre - CR-22-002886",
+    "case_number": "CR-22-002886",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1hnOBP7zb-jEhIMFe5qpXkEo4Eb_MrMoI",
+    "completeness_flag": "pending",
+    "batch_id": "2026-04-30_StanislausDA_INV187",
+    "code": "expiring-soon",
+    "description": "FTP link expires 2026-07-29.",
+    "deadline": "2026-07-29",
+    "days_until": 79,
+    "severity": "warn",
+    "receipt_url": "https://drive.google.com/drive/folders/16Jqc6VxAurWX57npQdQcJJGb6Ubj9AnV"
+  },
+  {
+    "matter": "Mitchell, DeAndre - CR-22-002886",
+    "case_number": "CR-22-002886",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1hnOBP7zb-jEhIMFe5qpXkEo4Eb_MrMoI",
+    "completeness_flag": "pending",
+    "batch_id": "2025-01-21_StanislausDA_INV187",
+    "code": "other",
+    "description": "Evidence.com link sent separately per 1/21/25 transmittal \u2014 locate in firm inbox and pull.",
+    "deadline": null,
+    "days_until": null,
+    "severity": "warn",
+    "receipt_url": "https://drive.google.com/drive/folders/1eDf5vnwEPsDSlctHaOfG8ZlGMabhHbpa"
+  },
+  {
+    "matter": "Mitchell, DeAndre - CR-22-002886",
+    "case_number": "CR-22-002886",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1hnOBP7zb-jEhIMFe5qpXkEo4Eb_MrMoI",
+    "completeness_flag": "pending",
+    "batch_id": "2025-01-21_StanislausDA_INV187",
+    "code": "other",
+    "description": "Physical DISC mailed to office 1/21/25 \u2014 locate (mailroom / Christine / Kellie).",
+    "deadline": null,
+    "days_until": null,
+    "severity": "warn",
+    "receipt_url": "https://drive.google.com/drive/folders/1eDf5vnwEPsDSlctHaOfG8ZlGMabhHbpa"
   },
   {
     "matter": "Brown, Clifford - CR-25-003661",
@@ -1191,7 +1256,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter (substantive 10-item demand, DDA Aleman) DRAFT pending JWN review. Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1204,7 +1269,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review (ADA Elgin Lowe). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1217,7 +1282,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Follow-up demand for 9 outstanding \u00a7 1054.1 categories DRAFT pending JWN review (Sacramento DA, DDA Lee referenced \u2014 full name TBD). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1230,7 +1295,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "DDA Danny Lee (leed@sacda.org) confirmed via Yahoo sweep \u2014 letter regenerated.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1243,7 +1308,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review (Alameda generic intake; no DDA assigned). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1256,7 +1321,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review (DDA Edward Alan McGarvey). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1269,7 +1334,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review \u2014 companion docket; DDA TBD. Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1282,7 +1347,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Follow-up discovery NUDGE letter DRAFT pending JWN review (DDA Carsyn Henry; promised 4/22, no production). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1295,7 +1360,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review (DDA Amanda Michelle Chavez). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1308,7 +1373,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Follow-up discovery / Brady demand DRAFT pending JWN review (DDA TBD). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1321,7 +1386,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "DDA Ajaypal Singh (ajaypal.singh@acgov.org) confirmed via Yahoo sweep \u2014 letter regenerated.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1334,7 +1399,7 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "Discovery request letter DRAFT pending JWN review (DDA TBD). Letter PDF + Gmail draft staged.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   },
@@ -1347,12 +1412,12 @@ const ACTION_NEEDED = [
     "code": "awaiting-jwn-approval",
     "description": "DDA Jacq Wilson (jacq.wilson@acgov.org) confirmed via Yahoo sweep \u2014 letter regenerated as NUDGE.",
     "deadline": "2026-05-21",
-    "days_until": 11,
+    "days_until": 10,
     "severity": "info",
     "receipt_url": null
   }
 ];
-const VELOCITY = {"days": ["05-03", "05-04", "05-05", "05-06", "05-07", "05-08", "05-09"], "series": {}};
+const VELOCITY = {"days": ["05-04", "05-05", "05-06", "05-07", "05-08", "05-09", "05-10"], "series": {}};
 const CATEGORIES = ["Police reports", "PC declaration", "Charging document", "Defendant statements", "Witness statements", "BWC footage", "In-car/dashcam/surveillance", "Audio interviews", "Lab/forensic/chain-of-custody", "Defendant criminal history", "Search warrant materials", "Felony exhibits", "411 statements", "411 felony statements", "Other discovery"];
 
 function escapeHtml(s) {
