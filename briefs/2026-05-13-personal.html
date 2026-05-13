@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e17">
+<title>Personal Brief — May 13, 2026</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg-panel: #0f1421;
+    --bg-code: #141b2d;
+    --text: #e2e8f0;
+    --text-heading: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-detail: #cbd5e1;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --overdue: #ef4444;
+    --today: #f59e0b;
+    --upcoming: #3b82f6;
+    --matter: #60a5fa;
+    --court: #34d399;
+    --quote-border: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+    min-height: 100vh;
+  }
+  nav.topnav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10,14,23,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav.topnav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  nav.topnav a:hover, nav.topnav a.active {
+    color: var(--accent-hover);
+    background: rgba(96,165,250,0.08);
+  }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 18px 80px;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-heading);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 28px 0 12px;
+  }
+  h1 { font-size: 28px; margin-top: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+  h2 { font-size: 22px; margin-top: 32px; }
+  h3 { font-size: 18px; margin-top: 24px; color: var(--accent); }
+  h4 { font-size: 16px; color: var(--text-detail); }
+  p { margin: 10px 0; }
+  a { color: var(--accent); text-decoration: none; word-break: break-word; }
+  a:hover { color: var(--accent-hover); text-decoration: underline; }
+  strong { color: var(--text-heading); font-weight: 600; }
+  em { color: var(--text-detail); }
+  ul, ol { padding-left: 24px; margin: 10px 0; }
+  li { margin: 4px 0; }
+  li.task { list-style: none; margin-left: -20px; }
+  li.task input[type=checkbox] { margin-right: 8px; transform: scale(1.05); }
+  code {
+    background: var(--bg-code);
+    color: #fbbf24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    margin: 14px 0;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: var(--text);
+    font-size: 13px;
+  }
+  blockquote {
+    border-left: 3px solid var(--quote-border);
+    padding: 4px 14px;
+    margin: 14px 0;
+    color: var(--text-detail);
+    background: rgba(96,165,250,0.04);
+    border-radius: 0 6px 6px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    color: var(--text-heading);
+    font-weight: 600;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+  footer {
+    margin-top: 40px;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--text-muted); }
+  footer a:hover { color: var(--accent-hover); }
+
+  /* mobile tweaks */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    main { padding: 16px 14px 80px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    h3 { font-size: 17px; }
+    table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a href="https://mrbreadbaby.github.io/command-center/brief.html" class="active">Personal</a>
+  <a href="https://mrbreadbaby.github.io/command-center/firm/firm-brief-latest.html">Firm</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Wiki Map</a>
+</nav>
+<main>
+<h1>Personal Brief — Wednesday, May 13, 2026</h1>
+<h2>Today</h2>
+<ul>
+<li><strong>🎂 Happy birthday.</strong> May 13. Three personal wishes already landed overnight on iMessage (Kyle Billingsley 02:45 PT, brother 03:43 PT, +18054594413 02:36 PT, unknown 03:48 PT). Likely more by morning Madrid. Nothing requires action; flagged so the day&#x27;s other items don&#x27;t drown the moment.</li>
+</ul>
+<ul>
+<li><strong>🚨 ADAMSKI — FILING DAY (Wed 5/13). All four components went v1.0 → v1.4 / v1.2 overnight; cure path now sound.</strong> The 5/12 critical-citation-defect crisis was fully resolved through Tier 2 gang reviews: cure is now an actual <strong>FW-001 + APP-015-INFO</strong> appellate-waiver application (per CRC 8.100(c)(2)(B)), not the bad &quot;the trial-court FW-003 is enough&quot; theory the v1.1 used. FILE-READY set: Cure Letter v1.4 (2 pp), FW-001 COA v1.4 (2 pp, two signed copies needed — one COA, one SLO), APP-004 v1.2 with-Judgment (10 pp), APP-009E v1.3 (1 pp, Joshua signs), FW-003 (Exhibit B, 1 pp). <strong>Filing sequence:</strong> (1) SLO Superior eFileCA — signed FW-001 v1.4 SLO copy; (2) COA TrueFiling — APP-004 packet; (3) COA TrueFiling — cure-letter packet (cure + FW-001 + FW-003 + APP-009E). <strong>Joshua&#x27;s role:</strong> sends substantive service email to adamski@ammcglaw.com FIRST, then signs APP-009E (so the POS attests to an event that already happened), then returns signed PDF + send-timestamp to Jeremy — only then does Jeremy upload the COA cure-letter packet. → <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/03-Court-Correspondence-OUT/file-ready-20260512/README.md">README with 5 open issues + recommended dispositions</a> · <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/03-Court-Correspondence-OUT/file-ready-20260512/Pemberton_NoticeOfDefault_CureLetter_v1.4_FILE-READY.pdf">Cure Letter v1.4</a> · <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/03-Court-Correspondence-OUT/file-ready-20260512/Pemberton_FW-001_COA_v1.4_FILE-READY.pdf">FW-001 v1.4</a> · <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/02-APP-003-and-APP-004/file-ready-20260512/Pemberton_APP-004_v1.2_with-Judgment_FILE-READY.pdf">APP-004 v1.2</a> · <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/03-Court-Correspondence-OUT/file-ready-20260512/Pemberton_APP-009E_v1.3_FILE-READY.pdf">APP-009E v1.3</a></li>
+</ul>
+<ul>
+<li><strong>Adamski — TrueFiling-registration check on Adamski (Esq.) is STILL BLOCKED on Chrome extension permissions.</strong> Both <code>tf3.truefiling.com</code> and <code>appellatecases.courtinfo.ca.gov</code> returned <code>permission_required</code> last run. APP-009E currently describes service &quot;via TrueFiling EFSP per CRC 8.78(a)&quot; — that language only holds if Adamski is a registered TrueFiling user on B354168. <strong>Safest posture for today&#x27;s filing: belt-and-suspenders.</strong> Joshua sends a direct email to <code>adamski@ammcglaw.com</code> under CCP § 1010.6 in parallel to EFSP service; if Adamski turns out registered, the direct email is harmless surplus, if not, the direct email is the operative service. Granting Chrome perms is a 60-second action that lets the registration check run before filing if Jeremy wants certainty. → <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/03-Court-Correspondence-OUT/file-ready-20260512/2026-05-12_Adamski-TrueFiling-registration-check.md">Registration-check workup</a></li>
+</ul>
+<ul>
+<li><strong>Med cycle — Day 13 step is TODAY.</strong> Last day inside the SKILL.md surface window (days 12, 13, 14). Day 12 step was yesterday; Day 14 step is tomorrow. Pre-step / refill should be in motion.</li>
+</ul>
+<ul>
+<li><strong>Baby (girlfriend, +34657747032) — yesterday&#x27;s two asks still open going into today.</strong> (a) Dana St address with number + zip code; (b) passport details / photo for hotel check-in. Today&#x27;s iMessage exchange was warm-but-light (matcha-vanilla protein at the mall, no follow-up on either ask). Both remain blocking on her side.</li>
+</ul>
+<ul>
+<li><strong>Ring purchase — deadline window now 1 day past.</strong> Tracker file <code>PURCHASE_TRACKER.md</code> still shows <code>status: pending</code> and no entries since 2026-04-21. The 5/5 and 5/12 calendar reminders both fired; no decision is recorded. Today is the day this either gets ordered, pushed, or aborted — leaving it in indeterminate state is itself a decision (against). → <a href="computer:///Users/jeremypemberton/Documents/Personal/Gifts/Rings-2026/PURCHASE_TRACKER.md">Tracker</a></li>
+</ul>
+<h2>Noonan (pointer)</h2>
+<p>Alpers-incapacity continuance batch: <strong>2 of 4 FILED tonight</strong> (Rodrigues 21-CR-004636 env #23688482; Weaver 25-CR-005354 env #23691590). <strong>2 of 4 staged 1-click submit</strong> in Tyler eFileCA (Ruiz Salas Draft #2856278; Navarro Desouza Draft #2856375) with signed POS uploaded and Gmail service drafts pre-loaded — Jeremy completes those today. Coverage hunt for 5/26 Alameda (Dept 104) has Fleming / O&#x27;Connor / McPeak all declined overnight; Guilmartin offered 5/14 only. Two firm-side red flags worth knowing about: (a) <strong>Stanislaus DA EDiscovery</strong> kicked back JWN&#x27;s Mitchell discovery re-request — case number typo (22-CR-002286 sent, correct is 22-CR-002886), 60-second fix; (b) <strong>GoDaddy / website-email &quot;hacked&quot;</strong> plus a threatening web-form submission (&quot;you fucked with me and are going to pay&quot;) — Sam Rafanello and Nicole investigating. → <a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-11.md">5/11 Noonan brief</a> (today&#x27;s not yet generated)</p>
+<h2>Personal tracks</h2>
+<ul>
+<li><strong>Adamski Appeal</strong> — All file-ready, Joshua-coordination sequence is the hard part today. Once the COA cure packet is in by midnight tonight, the 4/28 NOD is cured and the appeal stays alive.</li>
+<li><strong>Med cycle</strong> — Day 13 today. Day 14 tomorrow. Surface window ends.</li>
+<li><strong>Ring purchase</strong> — Deadline 1 day past, tracker still <code>pending</code>. Decision needed.</li>
+<li><strong>FBI fingerprint resubmission</strong> — <strong>~26 days</strong> outstanding carry-forward. No concrete next step.</li>
+<li><strong>Personal Gmail (<code>jerwalter@gmail.com</code>) MCP connection</strong> — <strong>16-day</strong> carry-forward. Adamski filing receipts (TrueFiling/eFileCA), FBI/DOJ correspondence, family + birthday traffic, personal-vendor mail all silent in this brief because of this gap. <strong>Today&#x27;s Adamski filing confirmations will land there and be invisible to tomorrow&#x27;s brief unless connected.</strong></li>
+<li><strong>USPS tracking</strong> — no active number configured.</li>
+<li><strong>Other personal</strong> — nothing else ad hoc.</li>
+</ul>
+<h2>Overnight (iMessage &amp; messages)</h2>
+<ul>
+<li><strong>Birthday wishes</strong> — Kyle (+18054594195) &quot;Happy birthday!!! Love ya buddy!&quot; 02:45 PT; brother (+18052521374) &quot;Love you dude!&quot; + &quot;secret weapons&quot; gag 03:43 PT; +18054594413 (Kyle&#x27;s wife) chain late evening; one unknown number. All warm, no action needed beyond a return wave.</li>
+<li><strong>Silva v. Billingsley (Kyle, +18054594195) — service for the 5/14 hearing.</strong> Kyle&#x27;s runner sent service by UPS Store regular mail (not overnight) — Jeremy walked Kyle through the CCP § 1013 / 2-day-prior-to-deadline risk; tracking number was captured on the fat receipt. Net: ships fine, no legal-position damage, but documents that you flagged the variance. Binder package committed to Kyle &quot;once the latest filings are accepted.&quot;</li>
+<li><strong>Baby (+34657747032)</strong> — normal day texts (matcha vanilla protein at the mall, getting-around-the-mall humor). No new asks; yesterday&#x27;s two still open.</li>
+<li><strong>Christine Noonan (+19258768402)</strong> — single OneDrive panic 5/12 19:03 PT (&quot;Meika needs to get into it&quot;). Resolved by Meika herself 21 min later. No action needed.</li>
+</ul>
+<h2>Inbox</h2>
+<p>Admin@ (personal Gmail still not connected — see Red Flags):</p>
+<ol>
+<li><strong>LegalEASE Criminal Referral — Case ID 350735</strong> (evan_cannata@legaleaseplan.com, 5/11 13:23 PT). Remote-assistance criminal matter, member open to 25% discount or flat fee. <strong>2-day carry-forward.</strong> Firm-intake routing decision (refer in/out, or back to LegalEASE per matter-fit).</li>
+</ol>
+<p>No other personal-actionable items in admin@. The noonanlaw33@ mirror surfaced the Alpers coverage thread, Stanislaus DA bounce, GoDaddy issue, DMV Lordus Hudson rescheduling, and Anthem/AT&amp;T autopay confirmations — all firm-side, fold into today&#x27;s Noonan brief.</p>
+<h2>Triage queue (top 6)</h2>
+<ol>
+<li><strong>BA UK261 claim B2NHJ8 — submitted? Case ref? Award amount?</strong> asked 2026-05-12 by Cowork Personal session. Tab was parked at Step 5 (Bank Details) yesterday; Jeremy was completing himself. <strong>1 day outstanding.</strong></li>
+<li><strong>United flight credits — log in, share codes + expirations</strong> asked 2026-05-12 by Cowork Personal session. 5-minute task. <strong>1 day outstanding.</strong></li>
+<li><strong>Personal intake email — split firm vs. personal forwards</strong> asked 2026-05-01 by Dispatch. <strong>12 days outstanding.</strong></li>
+<li><strong>Personal <code>/dashboards/</code> D3 pages — same cdnjs-blocked bug</strong> asked 2026-05-01 by Dispatch. 5-line jsdelivr fix per file. <strong>12 days outstanding.</strong></li>
+<li><strong><code>/firm/</code> auth model when full case-background pages ship</strong> asked 2026-05-01 by Dispatch. Cloudflare Pages / Vercel / private host / defer. <strong>12 days outstanding.</strong></li>
+<li><strong>LawTime spec — promote / dictate fresh / confirm parked (DEFERRED)</strong> asked 2026-04-29 by Dispatch. Pick A/B/C. <strong>14 days outstanding.</strong></li>
+</ol>
+<p>Footer: <code>run the queue</code> to pop these via AskUserQuestion. (Queue holds ~88 unanswered items.)</p>
+<h2>Red flags</h2>
+<ul>
+<li><strong>Adamski cure filing deadline — TODAY (Wed 5/13).</strong> Rule-based 15-day window from the 4/28 NOD ends. All components file-ready; the choreography (Joshua sign-and-send → Jeremy upload to COA) is the only execution risk.</li>
+<li><strong>Adamski TrueFiling registration check still blocked on Chrome ext perms.</strong> Belt-and-suspenders direct-email service is the safe answer; granting perms unblocks a definitive answer.</li>
+<li><strong>Med cycle Day 13 today, Day 14 tomorrow.</strong> Surface window ends.</li>
+<li><strong>Ring purchase deadline 1 day past.</strong> Tracker frozen at 4/21; no progress.</li>
+<li><strong>Mitchell Billups bar complaint</strong> — original 4/15 deadline now <strong>28 days past</strong>. Carry-forward unchanged.</li>
+<li><strong>FBI fingerprint resubmission</strong> — ~26 days outstanding, no concrete next step.</li>
+<li><strong>Personal Gmail (<code>jerwalter@gmail.com</code>) still not connected to Gmail MCP</strong> — 16-day carry-forward. Hides Adamski filing receipts, FBI/DOJ correspondence, family/birthday traffic. <strong>Will hide today&#x27;s TrueFiling + eFileCA confirmations.</strong></li>
+<li><strong>Law Corp Annual Renewal late-penalty notice (Reg # 4844)</strong> — DocuSign sent to JWN 5/1 from Cal Bar Division of Regulation. <strong>12-day carry-forward.</strong> JWN-personal compliance but firm-impacting if it slides.</li>
+<li><strong>Triage queue compounding</strong> — no burn-down in 13 days; ~88 unanswered items.</li>
+</ul>
+<h2>Live dashboards</h2>
+<ul>
+<li><a href="https://mrbreadbaby.github.io/command-center/">Practice Wiki Map</a></li>
+<li><a href="https://mrbreadbaby.github.io/command-center/audit.html">System Audit</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/hot.md">Hot Cache</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/wiki/triage/OPEN_QUESTIONS.md">Triage Queue</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/Noonan_Practice_Dashboard.md">Noonan Practice Dashboard</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-13.md">Today&#x27;s Noonan brief (when generated)</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/wiki/briefings/2026-05-12.md">Personal brief 5/12</a></li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li><strong>The 5/12 Adamski crisis fully resolved overnight.</strong> Yesterday&#x27;s brief led with a citation-defect alarm (non-existent CRC 8.100(b)(1)(C) cite + unsound &quot;trial-court FW-003 is enough&quot; theory) and the &quot;T+1 day&quot; cure deadline. Tier 2 gang reviews ran through the day, the cure was rewritten to the actual statutory path (FW-001 + APP-015-INFO), and FW-001 Item 6 was reversed back to UNCHECKED on a form-text-accuracy point (&quot;in the last six months&quot; — the 9/18/2024 trial-court grant is ~20 months old). APP-009E Item 2.a residence/business pair fixed. APP-004 advanced to v1.2 with Judgment attached per CRC 8.100(g)(1). What started as a near-miss is now firm-grade.</li>
+<li><strong>Calendar pull returned no events</strong> on admin@noonanlawoffices.com for 5/13 PT or 5/14 PT first-thing. Personal <code>jerwalter@gmail.com</code> Google Calendar still not added as a secondary source — 16-day carry-forward. Spain Holidays calendar shows nothing for today.</li>
+<li><strong>Sequence today (Jeremy):</strong> (1) reply to Baby on Dana St + passport (5 min); (2) review the 5 open issues in the Adamski README and lock recommended dispositions; (3) send Joshua the MESSAGE-TO-JOSHUA email with APP-009E v1.3 + cure / FW-001 / FW-003 attachments + explicit &quot;send service email first, sign POS after&quot;; (4) submit Ruiz Salas Tyler Draft #2856278, wait for acceptance, Gmail send service email; same for Navarro Draft #2856375; (5) Adamski SLO Superior FW-001 file (parallel track, doesn&#x27;t wait on Joshua); (6) once Joshua returns signed APP-009E + send-timestamp, upload COA cure packet + APP-004 to TrueFiling; (7) capture all 3 envelope numbers + conformed copies; (8) calendar 5/20 (CRC 8.26(c) 5-court-day deemed-granted clock) + 6/8 (APP-014 proposed settled statement); (9) ring decision; (10) Med cycle Day 13 verification.</li>
+<li><strong>Stanislaus DA case-number typo (22-CR-002286 vs. correct 22-CR-002886) on the Mitchell discovery re-request</strong> — 60-second firm-side fix worth pinging Christine on this morning; the EDiscovery clerk bounced the request without forwarding.</li>
+</ul>
+<footer>
+  Generated 2026-05-13 06:05 UTC &middot;
+  <a href="computer:///sessions/happy-eloquent-galileo/mnt/Documents/wiki/briefings/2026-05-13.md">Open source .md in iCloud</a>
+  &middot; <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+</footer>
+</main>
+</body>
+</html>
