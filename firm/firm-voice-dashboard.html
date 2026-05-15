@@ -271,7 +271,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
     <h1 style="margin-bottom:0;">Voice — Sam (voice agent) call log</h1>
     <p class="tagline">Call activity, voicemail queue, and intake capture for <code>voice@noonanlawoffices.com</code> — the firm's after-hours and overflow line.</p>
   </div>
-  <span class="refresh-stamp">Snapshot — <strong>2026-05-14 04:38 UTC</strong> · live data 17 most recent calls (2026-04-29 → 2026-05-03)</span>
+  <span class="refresh-stamp">Snapshot — <strong>2026-05-15 04:40 UTC</strong> · live data 17 most recent calls (2026-04-29 → 2026-05-03)</span>
 </header>
 
 <section class="hero-wrap">
@@ -282,23 +282,23 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
 <div class="kpis">
   <div class="kpi">
     <div class="kpi-label">Calls received</div>
-    <div class="kpi-value">17</div>
-    <div class="kpi-sub">2 in last 24h · 5 unique callers</div>
+    <div class="kpi-value">18</div>
+    <div class="kpi-sub">1 in last 24h · 5 unique callers</div>
   </div>
   <div class="kpi">
     <div class="kpi-label">Avg call duration</div>
-    <div class="kpi-value">6:20</div>
-    <div class="kpi-sub">median 3:35 · total 107m</div>
+    <div class="kpi-value">6:26</div>
+    <div class="kpi-sub">median 6:50 · total 115m</div>
   </div>
   <div class="kpi warn">
     <div class="kpi-label">Voicemail rate</div>
-    <div class="kpi-value">59%</div>
-    <div class="kpi-sub">10 of 17 calls landed in voicemail</div>
+    <div class="kpi-value">61%</div>
+    <div class="kpi-sub">11 of 18 calls landed in voicemail</div>
   </div>
   <div class="kpi warn">
     <div class="kpi-label">Tool fires per call</div>
     <div class="kpi-value">1.4</div>
-    <div class="kpi-sub">24 tool calls across 17 calls</div>
+    <div class="kpi-sub">25 tool calls across 18 calls</div>
   </div>
   <div class="kpi good">
     <div class="kpi-label">Intakes captured</div>
@@ -323,7 +323,7 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
 <p class="tagline">Click any column header to sort. Search box filters across all fields. Voicemail rows expand to show the AI summary.</p>
 <div id="call_grid"></div>
 
-<h2>Voicemail queue <span class="flag-badge info" style="vertical-align:middle; margin-left:.4em;">10 items</span></h2>
+<h2>Voicemail queue <span class="flag-badge info" style="vertical-align:middle; margin-left:.4em;">11 items</span></h2>
 <div id="vm_list"></div>
 
 <h2 style="margin-top:3rem;">Capacity model — projected steady-state <span class="flag-badge warn" style="vertical-align:middle; margin-left:.4em;">PROJECTED</span></h2>
@@ -383,6 +383,18 @@ footer { font-size: .85rem; color: #777; margin-top: 2.5rem; border-top: 1px sol
 
 <script>
 const CALLS = [
+  {
+    "started_pst": "2026-05-14 16:26:21",
+    "duration_s": 491,
+    "from": "+18052521394",
+    "turns": 41,
+    "tools": 1,
+    "vm": true,
+    "intake": false,
+    "sid": "CA8729439c022e65b071c45c7bee42d20f",
+    "type": "voicemail",
+    "vm_summary": "Contact Jeremy Pemberton (DOB 5/13/1984) at 805-252-1394 or jeremywp@me.com regarding his recent DUI manslaughter charge in Stanislaus County, arrested four days ago and not in custody, with an upcoming court date next week but no exact details, case number, or paperwork available. Flag as urgent due to imminent court date and serious charge; send confirmation text and email with document upload link if needed. Schedule intake review with Mr. Noonan to assess next steps."
+  },
   {
     "started_pst": "2026-05-03 19:54:00",
     "duration_s": 68,
@@ -584,26 +596,27 @@ const CALLS = [
   }
 ];
 const METRICS = {
-  "calls_total": 17,
-  "calls_24h": 2,
-  "calls_7d": 17,
-  "duration_total_s": 6459,
-  "duration_avg_s": 380,
-  "duration_median_s": 215,
-  "vm_count": 10,
-  "vm_rate": 59,
+  "calls_total": 18,
+  "calls_24h": 1,
+  "calls_7d": 18,
+  "duration_total_s": 6950,
+  "duration_avg_s": 386,
+  "duration_median_s": 410,
+  "vm_count": 11,
+  "vm_rate": 61,
   "intake_count": 2,
-  "tools_total": 24,
+  "tools_total": 25,
   "tool_fire_rate": 1.4,
   "unique_callers": 5,
   "callers": {
+    "+18052521394": 13,
     "+19258768402": 2,
-    "+18052521394": 12,
     "+18054287870": 1,
     "+13104971113": 1,
     "unknown": 1
   },
   "by_day": {
+    "2026-05-14": 1,
     "2026-05-03": 2,
     "2026-05-02": 3,
     "2026-05-01": 4,
@@ -623,9 +636,9 @@ function fmtPhone(p) {
 new Chart(document.getElementById('vol_chart'), {
   type: 'bar',
   data: {
-    labels: ["04-29", "04-30", "05-01", "05-02", "05-03"],
+    labels: ["04-29", "04-30", "05-01", "05-02", "05-03", "05-14"],
     datasets: [{
-      label: 'Calls', data: [3, 5, 4, 3, 2],
+      label: 'Calls', data: [3, 5, 4, 3, 2, 1],
       backgroundColor: 'rgba(31,95,191,.65)', borderColor: '#1f5fbf', borderWidth: 1
     }]
   },
@@ -640,7 +653,7 @@ new Chart(document.getElementById('caller_chart'), {
   data: {
     labels: ["(805) 252-1394", "(925) 876-8402", "(805) 428-7870", "(310) 497-1113", "unknown"],
     datasets: [{
-      data: [12, 2, 1, 1, 1],
+      data: [13, 2, 1, 1, 1],
       backgroundColor: ['#1f5fbf','#4DB37E','#D6A957','#C25C58','#5482CC','#3DA398']
     }]
   },
