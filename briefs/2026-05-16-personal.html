@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e17">
+<title>Personal Brief — May 16, 2026</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg-panel: #0f1421;
+    --bg-code: #141b2d;
+    --text: #e2e8f0;
+    --text-heading: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-detail: #cbd5e1;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --overdue: #ef4444;
+    --today: #f59e0b;
+    --upcoming: #3b82f6;
+    --matter: #60a5fa;
+    --court: #34d399;
+    --quote-border: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+    min-height: 100vh;
+  }
+  nav.topnav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10,14,23,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav.topnav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  nav.topnav a:hover, nav.topnav a.active {
+    color: var(--accent-hover);
+    background: rgba(96,165,250,0.08);
+  }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 18px 80px;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-heading);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 28px 0 12px;
+  }
+  h1 { font-size: 28px; margin-top: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+  h2 { font-size: 22px; margin-top: 32px; }
+  h3 { font-size: 18px; margin-top: 24px; color: var(--accent); }
+  h4 { font-size: 16px; color: var(--text-detail); }
+  p { margin: 10px 0; }
+  a { color: var(--accent); text-decoration: none; word-break: break-word; }
+  a:hover { color: var(--accent-hover); text-decoration: underline; }
+  strong { color: var(--text-heading); font-weight: 600; }
+  em { color: var(--text-detail); }
+  ul, ol { padding-left: 24px; margin: 10px 0; }
+  li { margin: 4px 0; }
+  li.task { list-style: none; margin-left: -20px; }
+  li.task input[type=checkbox] { margin-right: 8px; transform: scale(1.05); }
+  code {
+    background: var(--bg-code);
+    color: #fbbf24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    margin: 14px 0;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: var(--text);
+    font-size: 13px;
+  }
+  blockquote {
+    border-left: 3px solid var(--quote-border);
+    padding: 4px 14px;
+    margin: 14px 0;
+    color: var(--text-detail);
+    background: rgba(96,165,250,0.04);
+    border-radius: 0 6px 6px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    color: var(--text-heading);
+    font-weight: 600;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+  footer {
+    margin-top: 40px;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--text-muted); }
+  footer a:hover { color: var(--accent-hover); }
+
+  /* mobile tweaks */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    main { padding: 16px 14px 80px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    h3 { font-size: 17px; }
+    table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a href="https://mrbreadbaby.github.io/command-center/brief.html" class="active">Personal</a>
+  <a href="https://mrbreadbaby.github.io/command-center/firm/firm-brief-latest.html">Firm</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Wiki Map</a>
+</nav>
+<main>
+<h1>Personal Brief — Saturday, May 16, 2026</h1>
+<h2>Today</h2>
+<ul>
+<li><strong>Dylan LaRosa hearing binder — deliver to Jenny + Donald by tonight/Sunday for Mon 5/18 1:30 PT Wakefield Taylor hearing.</strong> You committed to this in the 5/15 23:55 PT group text: &quot;I&#x27;ll explain the pdf I just shared in the hearing binder I&#x27;ll provide by tomorrow.&quot; The 5/18 1:30 PT civil-harassment hearing on Dilbeck v. LaRosa is now ~36 hrs out. Status as of last night: response packet served + mailed certified to Colton 5/15 by Jenny (Pittsburg trip didn&#x27;t make 4:30 PT — she certified-mailed instead, you confirmed legal); Trystan + Christina Locatelli declarations eSigned (Christina under TnTBerry5@gmail.com on Trystan&#x27;s behalf with permission letter on file). Binder needs to walk through the served packet, explain the alternative-guardian PDF you sent late 5/15 (Donald-as-guardian path the court can use if needed), give Donald + Jenny clear &quot;what to do at the hearing&quot; instructions. → <a href="https://mail.google.com/mail/u/0/#inbox/19e2c12862583f76">Thread 19e2c12862583f76</a></li>
+</ul>
+<ul>
+<li><strong>Med cycle — confirm pickup with friend (+18054594195) at CVS Madonna + prepaid USPS flat-rate box.</strong> Day 16. You asked her late 5/15 (12:37 AM PT) to grab the refill and mail it; she said &quot;Sure&quot; at 6:04 PM her time, asked &quot;Today?&quot; — you replied with timing + DOB (5/13/1984) + &quot;I&#x27;ll be in touch tomorrow.&quot; Last message from her: &quot;Yes just please remind me. No problem.&quot; <strong>Today&#x27;s remind-me is yours to send.</strong> Once pickup happens, ask her for the USPS tracking number so it gets added to this brief.</li>
+</ul>
+<ul>
+<li><strong>Donald LaRosa responses — 3 audio recordings + multi-block email comments.</strong> Donald sent his comments in two emails 5/15 (18:27 + 18:42 PT) plus 3 audio recordings of his son&#x27;s side of the story. You replied + closed out the v4 declaration cycle yesterday; today is the substantive review pass for whatever isn&#x27;t already incorporated into the served packet, and incorporation into the binder. → <a href="https://mail.google.com/mail/u/0/#inbox/19e2c12862583f76">Thread 19e2c12862583f76</a></li>
+</ul>
+<ul>
+<li><strong>Adamski settled statement v0.3 — Tier 2 adversarial review NOT yet started.</strong> Yesterday&#x27;s brief flagged &quot;5 decisions blocking file-ready merge&quot; — that framing is now superseded by STATUS.md (5/14): v0.3 is a CLEAN DRAFT staged for adversarial review per your Tier 2 directive, and the 5 decision items are gang-review questions, not your direct calls. Filing deadline 6/8 (23 days). Decide today whether to spawn the Tier 2 task or push it to next week. → <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/02-APP-003-and-APP-004/settled-statement/STATUS.md">STATUS</a> · <a href="computer:///Users/jeremypemberton/Documents/Cases/ProPer/Pemberton-v-AMMCG/Appeal-2026/02-APP-003-and-APP-004/settled-statement/Pemberton_ProposedSettledStatement_v0.3_DRAFT_2026-05-14.pdf">v0.3 PDF</a></li>
+</ul>
+<ul>
+<li><strong>iCloud IMAP mirror — Phase 2 (pull COA file-stamped copies) still pending.</strong> Phase 1 setup deliverables are on disk; whether Jeremy completed the app-specific-password + <code>launchctl load</code> steps from his Mac is the unknown. If done, Phase 2 = pull conformed copies, save to AMMCG case folder, calendar 5/20 + 6/8 on admin@, update diary. → <a href="computer:///Users/jeremypemberton/Documents/wiki/tools/icloud-mirror/HANDOFF-2026-05-15.md">HANDOFF</a></li>
+</ul>
+<h2>Noonan (pointer)</h2>
+<p>Kramer 5/19 PH — DA Colleen Clark&#x27;s office initially re-set to 7/9 on 5/15 morning, then walked it back the same morning when the court realized parties hadn&#x27;t agreed; back on 5/19 at 9:00 PT Dept 11. Your amended-continuance v3 was sent 5/14, so the motion is now in the record either way. Two stale Kramer service drafts still sitting in admin@ Drafts (<code>19e29bc967ddf1b3</code> + <code>19e243011796fd83</code>) — delete manually in Gmail UI; Claude can&#x27;t. Mon 5/18 Blackwell Hobbs portal discrepancy unresolved. → <a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-14.md">Latest Noonan brief (5/14 cycle)</a> · next firm brief Mon 5/18.</p>
+<h2>Personal tracks</h2>
+<ul>
+<li><strong>Adamski Appeal</strong> — v0.3 staged for Tier 2 adversarial review (not yet spawned); 6/8 filing deadline = 23 days. SLO Superior FW-001 eFileCA confirmation still not visible in IMAP mirror (1-day sync was scoped narrow).</li>
+<li><strong>Med cycle</strong> — Day 16. Pickup arranged via friend (+18054594195) at CVS Madonna; awaiting your reminder text + USPS prepaid box dropoff. Once shipped, paste the tracking number into SKILL.md so this brief tracks it.</li>
+<li><strong>Dylan LaRosa (consulting)</strong> — hearing binder owed by tonight/Sunday; 5/18 1:30 PT Wakefield Taylor Pittsburg.</li>
+<li><strong>Ring purchase</strong> — <strong>4 days past target deadline (5/12).</strong> Tracker still <code>status: pending</code>, frozen at 4/21. Decide-or-abort. → <a href="computer:///Users/jeremypemberton/Documents/Personal/Gifts/Rings-2026/PURCHASE_TRACKER.md">Tracker</a></li>
+<li><strong>FBI fingerprint resubmission</strong> — ~29 days outstanding; no concrete next step.</li>
+<li><strong>Christine money note</strong> — she said &quot;I&#x27;ll send y money later&quot; + &quot;No. You are good&quot; 5/15 23:35 PT. No action on your side; carry through.</li>
+<li><strong>USPS tracking</strong> — no number configured yet. (Add the certified mail tracking number Jenny used to mail Colton&#x27;s packet 5/15, if you want it surfaced here too.)</li>
+<li><strong>BA UK261 claim</strong> — still parked at Step 5 in Cliffroom Chrome. <strong>4 days outstanding.</strong></li>
+</ul>
+<h2>Overnight (iMessage &amp; messages)</h2>
+<ul>
+<li><strong>Group chat (Donald + Jenny + Christina + Trystan, chat e9b2…)</strong> — 64 messages between 8:28 PT and ~midnight. Net: response packet served + mailed certified to Colton; Christina (TnTBerry5@gmail.com) eSigned declarations on Trystan&#x27;s behalf with permission letter on file; you sent an alternative-guardian PDF late and committed to explaining it in the binder.</li>
+<li><strong>Donald + Jenny group (chat 5bc9…)</strong> — 42 messages on logistics: which docs go in the certified envelope, which don&#x27;t, who the addressee is (Colton, not father), USPS receipt confirmations, Jenny&#x27;s &quot;won&#x27;t make courthouse by 4:30 — printing now.&quot;</li>
+<li><strong>Christine (+19258768402)</strong> — 4 messages 5/15 PT confirming you&#x27;re good (&quot;No. You are good&quot;) and that she&#x27;ll send you money later. No firm directives overnight.</li>
+<li><strong>Friend (+18054594195)</strong> — confirmed med pickup with &quot;Sure&quot; + &quot;Today?&quot; + &quot;Yes just please remind me.&quot; Awaiting your reminder.</li>
+<li><strong>Jenny (+15103812716)</strong> — 15 individual messages on the response/serving workflow + asked you to also send the final copy to <code>jennymegoloff@outlook.com</code> (you did).</li>
+<li><strong>chat.db</strong> — fresh as of 06:03 UTC (~minutes old at brief generation); well within the 26-hr threshold.</li>
+</ul>
+<h2>Inbox</h2>
+<ol>
+<li><strong>Christina Locatelli declaration eSignature COMPLETED 5/15 22:58 UTC</strong> — copy stored in Drive (Google eSignature). Nothing for you to do; informational close-loop. → <a href="https://mail.google.com/mail/u/0/#inbox/19e2ddd42485146e">Thread 19e2ddd42485146e</a></li>
+<li><strong>Donald LaRosa — additional comments + answers (5/15 18:42 PT)</strong> — second-block reply on the v4 declaration cycle; review for anything not already incorporated into the served packet before assembling the binder. → <a href="https://mail.google.com/mail/u/0/#inbox/19e2c12862583f76">Thread 19e2c12862583f76</a></li>
+<li><strong>EACBA &quot;Burn Bright, Not Out&quot; 5/21</strong> — RSVP if relevant; informational. → <a href="https://mail.google.com/mail/u/0/#inbox/19e2cf71d02096a5">Thread 19e2cf71d02096a5</a></li>
+<li><strong>LegalEASE Traffic Ticket Referral — Case ID 381660</strong> — carry-forward from 5/13; firm-intake routing decision still pending.</li>
+</ol>
+<h2>Triage queue (top 6)</h2>
+<ol>
+<li><strong>BA UK261 claim B2NHJ8 — submitted? Case ref? Award amount?</strong> asked 2026-05-12. Tab parked at Step 5. <strong>4 days outstanding.</strong></li>
+<li><strong>United flight credits — log in, share codes + expirations</strong> asked 2026-05-12. 5-minute task. <strong>4 days outstanding.</strong></li>
+<li><strong>Personal intake email — split firm vs. personal forwards</strong> asked 2026-05-01. <strong>15 days outstanding.</strong></li>
+<li><strong>Personal <code>/dashboards/</code> D3 pages — cdnjs-blocked bug</strong> asked 2026-05-01. 5-line jsdelivr fix per file. <strong>15 days outstanding.</strong></li>
+<li><strong><code>/firm/</code> auth model when full case-background pages ship</strong> asked 2026-05-01. Cloudflare Pages / Vercel / private host / defer. <strong>15 days outstanding.</strong></li>
+<li><strong>LawTime spec — promote / dictate fresh / confirm parked (DEFERRED)</strong> asked 2026-04-29. Pick A/B/C. <strong>17 days outstanding.</strong></li>
+</ol>
+<p>Footer: <code>run the queue</code> to pop these via AskUserQuestion.</p>
+<h2>Red flags</h2>
+<ul>
+<li><strong>Dylan LaRosa hearing 5/18 1:30 PT is 36 hrs out.</strong> Binder commitment is yours; today&#x27;s delivery is the safest cushion before Sunday-evening prep on Donald + Jenny&#x27;s side.</li>
+<li><strong>Ring purchase — 4 days past deadline.</strong> No movement since 4/21.</li>
+<li><strong>FBI fingerprint resubmission — ~29 days outstanding.</strong></li>
+<li><strong>Adamski Tier 2 adversarial review not yet spawned.</strong> Filing window 23 days. Earlier brief framing (&quot;5 decisions blocking file-ready merge&quot;) was inaccurate; corrected here.</li>
+<li><strong>SLO Superior FW-001 (eFileCA) confirmation NOT yet visible in IMAP mirror.</strong> If 5/20 deemed-granted clock matters, verify via Yahoo docket / Odyssey before relying on it.</li>
+<li><strong>Two stale Kramer service drafts in admin@ Drafts</strong> — Claude can&#x27;t delete; you do it in Gmail UI.</li>
+<li><strong>Mitchell Billups bar complaint</strong> — original 4/15 deadline = <strong>31 days past.</strong></li>
+<li><strong>Law Corp Annual Renewal late-penalty notice (Reg # 4844)</strong> — DocuSign 5/1; <strong>15-day carry-forward.</strong></li>
+<li><strong>Calendar empty Sat 5/16 + Sun 5/17 PT on admin@</strong> — no events on any of the 3 connected calendars (admin@, Consultations, Spain Holidays). Personal jerwalter@ still not connected.</li>
+</ul>
+<h2>Live dashboards</h2>
+<ul>
+<li><a href="https://mrbreadbaby.github.io/command-center/">Practice Wiki Map</a></li>
+<li><a href="https://mrbreadbaby.github.io/command-center/audit.html">System Audit</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/hot.md">Hot Cache</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/wiki/triage/OPEN_QUESTIONS.md">Triage Queue</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/Noonan_Practice_Dashboard.md">Noonan Practice Dashboard</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-14.md">Latest Noonan brief (5/14 cycle)</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/wiki/briefings/2026-05-15.md">Personal brief 5/15</a></li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li><strong>Sequence today (Saturday):</strong> (1) send the reminder text to friend +18054594195 about CVS Madonna pickup; (2) review Donald&#x27;s second-block comments + 3 audio recordings against the served packet; (3) assemble Dylan LaRosa hearing binder + send to Jenny + Donald by tonight/Sunday morning; (4) decide whether to spawn Adamski Tier 2 adversarial review task now or push to next week; (5) ring decide-or-abort.</li>
+<li><strong>Next Noonan brief:</strong> Mon 5/18.</li>
+</ul>
+<footer>
+  Generated 2026-05-16 06:10 UTC &middot;
+  <a href="computer:///sessions/wizardly-vibrant-galileo/mnt/Documents/wiki/briefings/2026-05-16.md">Open source .md in iCloud</a>
+  &middot; <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+</footer>
+</main>
+</body>
+</html>
