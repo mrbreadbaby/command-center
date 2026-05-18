@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e17">
+<title>Personal Brief — May 18, 2026</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg-panel: #0f1421;
+    --bg-code: #141b2d;
+    --text: #e2e8f0;
+    --text-heading: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-detail: #cbd5e1;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --overdue: #ef4444;
+    --today: #f59e0b;
+    --upcoming: #3b82f6;
+    --matter: #60a5fa;
+    --court: #34d399;
+    --quote-border: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+    min-height: 100vh;
+  }
+  nav.topnav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10,14,23,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav.topnav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  nav.topnav a:hover, nav.topnav a.active {
+    color: var(--accent-hover);
+    background: rgba(96,165,250,0.08);
+  }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 18px 80px;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-heading);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 28px 0 12px;
+  }
+  h1 { font-size: 28px; margin-top: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+  h2 { font-size: 22px; margin-top: 32px; }
+  h3 { font-size: 18px; margin-top: 24px; color: var(--accent); }
+  h4 { font-size: 16px; color: var(--text-detail); }
+  p { margin: 10px 0; }
+  a { color: var(--accent); text-decoration: none; word-break: break-word; }
+  a:hover { color: var(--accent-hover); text-decoration: underline; }
+  strong { color: var(--text-heading); font-weight: 600; }
+  em { color: var(--text-detail); }
+  ul, ol { padding-left: 24px; margin: 10px 0; }
+  li { margin: 4px 0; }
+  li.task { list-style: none; margin-left: -20px; }
+  li.task input[type=checkbox] { margin-right: 8px; transform: scale(1.05); }
+  code {
+    background: var(--bg-code);
+    color: #fbbf24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    margin: 14px 0;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: var(--text);
+    font-size: 13px;
+  }
+  blockquote {
+    border-left: 3px solid var(--quote-border);
+    padding: 4px 14px;
+    margin: 14px 0;
+    color: var(--text-detail);
+    background: rgba(96,165,250,0.04);
+    border-radius: 0 6px 6px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    color: var(--text-heading);
+    font-weight: 600;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+  footer {
+    margin-top: 40px;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--text-muted); }
+  footer a:hover { color: var(--accent-hover); }
+
+  /* mobile tweaks */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    main { padding: 16px 14px 80px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    h3 { font-size: 17px; }
+    table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a href="https://mrbreadbaby.github.io/command-center/brief.html" class="active">Personal</a>
+  <a href="https://mrbreadbaby.github.io/command-center/firm/firm-brief-latest.html">Firm</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+  <a href="https://mrbreadbaby.github.io/command-center/">Wiki Map</a>
+</nav>
+<main>
+<h1>Personal Brief — May 18, 2026</h1>
+<h2>Today</h2>
+<ul>
+<li><strong>🔴 Blackwell Hobbs hearing date triage — 5/18 vs 6/9.</strong> Wiki + matter CORRECTIONS anchor a Hobbs hearing at <strong>Mon 2026-05-18 9:00 AM Dept 112 Alameda WMC-Oakland</strong>; Alameda portal sync (4/30) showed next hearing as <strong>6/9 PTH</strong>. 18 days stale, unresolved across three portal sweeps, and the event is <strong>NOT on the admin@ calendar</strong>. Triage queue option A: call Alameda WMC clerk <strong>510-690-2700</strong> at 8:30 AM PT (5:30 PM CET — you&#x27;re awake) to verify. Coverage decisions cascade off this. → <a href="computer:///Users/jeremypemberton/Documents/wiki/triage/OPEN_QUESTIONS.md">OPEN_QUESTIONS</a></li>
+<li><strong>Discovery Bay client thread (Dylan / Colton Dilbeck matter) — review promised.</strong> Last night at ~5:17 PM PT the client confirmed: &quot;I&#x27;ll do my best to review it asap. Thanks for all your help.&quot; You explained the structural shift (JWN not signing; admin-level fix; petitioner has not received the prior documents so no harm). Open loop: client review of the change letter + your follow-up on filing procedures for the Martinez courthouse. They&#x27;d prefer not to drive in rush-hour Discovery Bay → Martinez tomorrow. Decide today whether to arrange a Martinez filing runner or have them go themselves.</li>
+<li><strong>Spanish class / personal commitments today</strong> — no events on admin@ calendar for today; personal Google Calendar (jerwalter@gmail.com) is not accessible from this session (admin@ scope only). Check personal cal manually.</li>
+</ul>
+<h2>Noonan (pointer)</h2>
+<ul>
+<li><strong>Mon 5/18 9:00 AM:</strong> Blackwell Hobbs hearing — date in dispute, see top item.</li>
+<li><strong>Tue 5/19 9:00 AM:</strong> Kramer PH at Wiley Manuel Dept 11 — <code>[CONTINUANCE PENDING]</code>. Amended v2 continuance packet was staged in admin@ Drafts last week for your manual attach + send.</li>
+<li>Last firm brief: <a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-14.md">firm-2026-05-14.md</a>. Next firm brief: today (Mon) — not yet generated.</li>
+</ul>
+<h2>Personal tracks</h2>
+<ul>
+<li><strong>AMMCG (Pemberton v. Adamski) — COA file-stamped copies retrieval.</strong> Per overnight handoff, the iCloud Mail mirror Phase 1 setup (app-specific password, save to .icloud-pass, dry-run + load launchd) is queued. Phase 2 pulls COA conformed copies, calendars <strong>5/20 + 6/8</strong> on admin@. → <a href="computer:///Users/jeremypemberton/Documents/wiki/tools/icloud-mirror/HANDOFF-2026-05-15.md">handoff</a></li>
+<li><strong>Med cycle:</strong> today is 5/18; next refill window is <strong>6/12–6/14</strong>. No action this week.</li>
+<li><strong>FBI fingerprint resubmission:</strong> carry-forward, no update.</li>
+<li><strong>USPS tracking:</strong> no active number configured.</li>
+<li><strong>Other personal:</strong> Martina (Sara&#x27;s sister, Apple Pencil thread) — resolved last night, no follow-up needed. BA UK261 claim B2NHJ8 (Step 5 parked in Cliffroom Chrome) and United flight credits (login + share codes) remain on the triage queue from 5/12.</li>
+</ul>
+<h2>Overnight (iMessage &amp; messages)</h2>
+<ul>
+<li><strong>Discovery Bay client (+1 510-676-5852 / +1 510-381-2716 group).</strong> Five-message thread 5/17 1:07–5:17 PM PT and one 5:17 PM PT this morning. Client agreed you can put their name as representing Dylan; asked about cost to have someone file in Martinez first thing rather than them driving in. You committed to checking filing procedures and getting back. Outstanding: arrange Martinez filing OR confirm they&#x27;ll go themselves.</li>
+<li><strong>+1 805-252-1374 (politics/news friend).</strong> Long casual thread 5/17 10:51 AM–12:39 PM PT — Spain politics, OpenAI/Musk case, Trump primaries. One operational data point: &quot;Christine payment less $100 / Just came through&quot; — flag if you were waiting on a Christine-sourced payment.</li>
+<li><strong>Martina Martín Navas.</strong> Sister&#x27;s Apple Pencil — resolved (&quot;don&#x27;t worry thank you&quot;).</li>
+<li><strong>+34 657-747-032 (Spain).</strong> Casual walk-with-Lola note — no action.</li>
+<li><strong>Christine Noonan (+1 925-876-8402):</strong> no messages in 26-hr window.</li>
+</ul>
+<h2>Inbox</h2>
+<ul>
+<li>No actionable items — Gmail returned 0 threads in inbox newer than 24 hours.</li>
+</ul>
+<h2>Triage queue (top 6)</h2>
+<ol>
+<li><strong>🔴 Blackwell Hobbs hearing date: 5/18 or 6/9?</strong> — asked 2026-05-18; unblocks coverage decision today, whether to file Hobbs motion now, § 1054.5 escalation. Option A: call clerk 510-690-2700 at 8:30 AM PT.</li>
+<li><strong>Wiki-map daily rebuild — 2026-05-16 run missing</strong> — asked 2026-05-17; sandbox-path bug in <code>rebuild.py</code>; pick A (auto-detect Cowork prefix), B (export overrides in wrapper), or C (catch-up + durable fix).</li>
+<li><strong>BA UK261 claim B2NHJ8 — submitted? Case ref? Award amount?</strong> — asked 2026-05-12; parked at Step 5 (Bank Details) in Cliffroom Chrome. Need case ref to set the 8-week follow-up.</li>
+<li><strong>United flight credits — log in, share codes + expirations</strong> — asked 2026-05-12; 5-minute task behind united.com login.</li>
+<li><strong>Personal intake email — split firm vs. personal forwards</strong> — asked 2026-05-01; pick alias (Gmail+addressing, personal domain, separate alias) so Billingsley-type personal items stop landing in the firm brief.</li>
+<li><strong>Personal <code>/dashboards/</code> D3 pages have cdnjs-blocked bug</strong> — asked 2026-05-01; 5-line jsdelivr+fallback patch per file mirrors the firm-side fix.</li>
+</ol>
+<p>Run <code>let&#x27;s triage</code> / <code>run the queue</code> / <code>pop the questions</code> to walk these via AskUserQuestion.</p>
+<h2>Red flags</h2>
+<ul>
+<li><strong>Blackwell Hobbs date question:</strong> 18 days outstanding, comes due <strong>TODAY</strong>.</li>
+<li><strong>BA + United claims:</strong> 6 days outstanding; both unblock with ~5 minutes of your time.</li>
+<li><strong>Wiki-map 5/16 gap:</strong> 2 days outstanding; durable path-resolution fix still pending.</li>
+<li><strong>Discovery Bay Martinez filing:</strong> new last night, becomes time-critical if filing must happen tomorrow morning.</li>
+</ul>
+<h2>Live dashboards</h2>
+<ul>
+<li><a href="https://mrbreadbaby.github.io/command-center/">Practice Wiki Map</a></li>
+<li><a href="https://mrbreadbaby.github.io/command-center/audit.html">System Audit</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/hot.md">Hot Cache</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/wiki/triage/OPEN_QUESTIONS.md">Triage Queue</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/Noonan_Practice_Dashboard.md">Noonan Practice Dashboard</a></li>
+<li><a href="computer:///Users/jeremypemberton/Documents/Cases/Noonan/Admin/wiki/briefings/firm-2026-05-14.md">Last Noonan Firm Brief (5/14)</a></li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li>Personal Google Calendar (jerwalter@gmail.com) is not accessible via the Calendar MCP from this scheduled-task scope (admin@noonanlawoffices.com only). If you want personal events surfaced in the daily brief, the SKILL needs the personal calendar wired in — flagging for next session.</li>
+</ul>
+<footer>
+  Generated 2026-05-18 07:00 PT &middot;
+  <a href="computer:///sessions/wonderful-friendly-gauss/mnt/Documents/wiki/briefings/2026-05-18.md">Open source .md in iCloud</a>
+  &middot; <a href="https://mrbreadbaby.github.io/command-center/">Dashboard</a>
+</footer>
+</main>
+</body>
+</html>
